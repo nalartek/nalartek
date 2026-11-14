@@ -56,6 +56,14 @@ const breadcrumbs = [
 
   <section class="section category-archive" aria-labelledby="category-articles">
     <div class="container">
+      
+      <!-- Teks Pengantar SEO -->
+      <div class="about-copy" style="margin-bottom: 4rem; max-width: 800px;">
+        {category.longDescription.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+
       <div class="archive-toolbar">
         <h2 class="archive-count" id="category-articles">
           Artikel {category.name}
