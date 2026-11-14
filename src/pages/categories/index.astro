@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import {
+  getCategoryArticles,
+  getCategoryStats,
+  getPublishedArticles,
+} from '../../lib/articles';
+
+const articles = await getPublishedArticles();
+const categoryStats = getCategoryStats(articles);
+
+const latestByCategory = new Map(
+  categoryStats.map((category) => [
+    category.slug,
+    getCategoryArticles(articles, category.slug)[0],
+  ]),
+);
+---
+
+<BaseLayout
+  title="Kategori"
+  description="Jelajahi empat kategori NalarTek: Android, Engineering & Linux, AI & Software, serta Technology & Innovation."
+  breadcrumbs={[
+    { label: 'Beranda', href: '/' },
+    { label: 'Kategori' },
+  ]}
+>
+  <PageHero
+    eyebrow="Jelajahi"
+    title="Kategori"
+    description="Empat jalur belajar untuk memahami perangkat, sistem, perangkat lunak, dan arah inovasi teknologi."
+    breadcrumbs={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Kategori' },
+    ]}
+  >
+    <div class="page-hero__meta">
+      <span>{categoryStats.length} kategori</span>
+      <span aria-hidden="true">·</span>
+      <span>{articles.length} artikel</span>
+    </div>
+  </PageHero>
+
+  <section class="section category-index" aria-label="Daftar kategori">
+    <div class="container">
+      <div class="category-grid category-grid--index">
+        {categoryStats.map((category) => {
+          const latest = latestByCategory.get(category.slug);
+
+          return (
+            <article class="category-card category-card--index">
+              <div class="category-top">
+                <span>{category.number} / Kategori</span>
+                <span class="category-arrow" aria-hidden="true">↗</span>
+              </div>
+
+              <h2>{category.name}</h2>
+              <p>{category.description}</p>
+
+              {latest ? (
+                <a class="category-latest" href={`/articles/${latest.data.slug}/`}>
+                  <span class="category-latest__label">Terbaru</span>
+                  <span>{latest.data.title}</span>
+                </a>
+              ) : (
+                <p class="category-latest category-latest--empty">
+                  Belum ada artikel di kategori ini.
+                </p>
+              )}
+
+              <div class="category-bottom">
+                <span>{category.count} artikel</span>
+                <a class="category-action" href={`/categories/${category.slug}/`}>
+                  Jelajahi kategori <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,34 @@
+---
+import { getCategory, type CategorySlug } from '../lib/categories';
+
+interface Props {
+  category: CategorySlug;
+  link?: boolean;
+  subtle?: boolean;
+}
+
+const { category, link = true, subtle = false } = Astro.props;
+const categoryData = getCategory(category);
+
+if (!categoryData) {
+  throw new Error(`Kategori tidak dikenal: ${category}`);
+}
+
+const className = `category-badge${subtle ? ' category-badge--subtle' : ''}`;
+---
+
+{
+  link ? (
+    <a
+      class={className}
+      data-category={category}
+      href={`/categories/${category}/`}
+    >
+      {categoryData.name}
+    </a>
+  ) : (
+    <span class={className} data-category={category}>
+      {categoryData.name}
+    </span>
+  )
+}

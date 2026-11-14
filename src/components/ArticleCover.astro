@@ -1,0 +1,40 @@
+---
+import { getCategory } from '../lib/categories';
+import type { ArticleEntry } from '../lib/articles';
+
+interface Props {
+  article: ArticleEntry;
+  eager?: boolean;
+  class?: string;
+}
+
+const { article, eager = false, class: className = '' } = Astro.props;
+const { coverImage, category } = article.data;
+const categoryData = getCategory(category);
+
+if (!categoryData) {
+  throw new Error(`Kategori tidak dikenal: ${category}`);
+}
+---
+
+<div class={`article-cover ${className}`.trim()} data-category={category}>
+  {
+    coverImage ? (
+      <img
+        src={coverImage.src}
+        alt={coverImage.alt}
+        width={coverImage.width}
+        height={coverImage.height}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchpriority={eager ? 'high' : undefined}
+      />
+    ) : (
+      <div class="article-cover__fallback" aria-hidden="true">
+        <span class="article-cover__number">{categoryData.number}</span>
+        <span class="article-cover__label">{categoryData.name}</span>
+        <span class="article-cover__mark">NALARTEK</span>
+      </div>
+    )
+  }
+</div>

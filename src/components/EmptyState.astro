@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href?: string;
+  label?: string;
+}
+
+const { title, description, href, label = 'Kembali ke beranda' } = Astro.props;
+---
+
+<div class="empty-state">
+  <span class="empty-state__mark" aria-hidden="true">N</span>
+  <h2>{title}</h2>
+  <p>{description}</p>
+  {href && <a class="button button-secondary" href={href}>{label}</a>}
+</div>

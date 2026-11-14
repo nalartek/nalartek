@@ -1,8 +1,12 @@
 {
+  "id": "/",
   "name": "NalarTek — Understand Technology. Build What Matters.",
   "short_name": "NalarTek",
-  "description": "Independent technology media exploring Android, engineering, software, AI, and practical technology.",
+  "description": "Media teknologi independen dari Indonesia: Android, engineering, Linux, AI, software, dan inovasi.",
+  "lang": "id",
+  "dir": "ltr",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#101d32",
   "theme_color": "#101d32",

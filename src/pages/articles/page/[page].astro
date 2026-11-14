@@ -1,0 +1,77 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import ArticleArchive from '../../../components/ArticleArchive.astro';
+import {
+  PAGE_SIZE,
+  getCategoryStats,
+  getPublishedArticles,
+  type ArticleEntry,
+} from '../../../lib/articles';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const articles = await getPublishedArticles();
+  const totalPages = Math.max(1, Math.ceil(articles.length / PAGE_SIZE));
+  const categoryStats = getCategoryStats(articles);
+
+  return Array.from({ length: totalPages }, (_, index) => index + 1)
+    .filter((page) => page > 1)
+    .map((page) => ({
+      params: { page: String(page) },
+      props: {
+        articles: articles.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+        categoryStats,
+        currentPage: page,
+        totalPages,
+        totalArticles: articles.length,
+      },
+    }));
+};
+
+interface Props {
+  articles: ArticleEntry[];
+  categoryStats: ReturnType<typeof getCategoryStats>;
+  currentPage: number;
+  totalPages: number;
+  totalArticles: number;
+}
+
+const { articles, categoryStats, currentPage, totalPages, totalArticles } =
+  Astro.props;
+
+const breadcrumbs = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Artikel', href: '/articles/' },
+  { label: `Halaman ${currentPage}` },
+];
+---
+
+<BaseLayout
+  title={`Artikel — Halaman ${currentPage}`}
+  description={`Halaman ${currentPage} dari arsip artikel NalarTek: panduan dan analisis tentang Android, Linux, AI, software, dan inovasi teknologi.`}
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow={`Arsip / Halaman ${currentPage}`}
+    title="Artikel"
+    description={`Halaman ${currentPage} dari ${totalPages} berisi catatan dan panduan NalarTek yang lebih lama.`}
+    breadcrumbs={breadcrumbs}
+  >
+    <div class="page-hero__meta">
+      <span>{totalArticles} artikel terbit</span>
+      <span aria-hidden="true">·</span>
+      <span>
+        Halaman {currentPage} dari {totalPages}
+      </span>
+    </div>
+  </PageHero>
+
+  <ArticleArchive
+    articles={articles}
+    totalArticles={totalArticles}
+    currentPage={currentPage}
+    totalPages={totalPages}
+    categoryStats={categoryStats}
+  />
+</BaseLayout>

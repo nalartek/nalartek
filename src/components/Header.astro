@@ -1,14 +1,24 @@
 ---
 const navLinks = [
-  { href: '#about', label: 'About' },
-  { href: '#topics', label: 'Topics' },
-  { href: '#latest', label: 'Articles' },
+  { href: '/articles/', label: 'Artikel' },
+  { href: '/categories/', label: 'Kategori' },
+  { href: '/about/', label: 'Tentang' },
+  { href: '/contact/', label: 'Kontak' },
 ];
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+function isActive(href: string) {
+  const path = href.replace(/\/+$/, '') || '/';
+  return path === '/'
+    ? currentPath === '/'
+    : currentPath === path || currentPath.startsWith(`${path}/`);
+}
 ---
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label="NalarTek home">
+    <a class="brand" href="/" aria-label="NalarTek — beranda">
       <img
         class="brand-logo"
         src="/images/nalartek-logo-128.png"
@@ -17,29 +27,43 @@ const navLinks = [
         height="128"
         alt=""
         aria-hidden="true"
-        fetchpriority="high"
         decoding="async"
       />
-      <span class="brand-wordmark">NALAR<span>TEK</span></span>
+      <span class="brand-wordmark" aria-hidden="true">NALAR<span>TEK</span></span>
     </a>
 
-    <nav class="desktop-nav" aria-label="Primary navigation">
-      {navLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+    <nav class="desktop-nav" aria-label="Navigasi utama">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          aria-current={isActive(link.href) ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
     </nav>
 
-    <a class="header-cta" href="#topics">
-      Explore <span aria-hidden="true">↗</span>
+    <a class="header-cta" href="/articles/">
+      Baca artikel <span aria-hidden="true">↗</span>
     </a>
 
     <details class="mobile-menu">
-      <summary aria-label="Open navigation menu">
+      <summary aria-label="Menu navigasi">
         <span class="menu-icon" aria-hidden="true">
           <span></span>
           <span></span>
         </span>
       </summary>
-      <nav aria-label="Mobile navigation">
-        {navLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      <nav aria-label="Navigasi mobile">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        ))}
+        <a href="/editorial-policy/">Kebijakan editorial</a>
       </nav>
     </details>
   </div>
@@ -47,7 +71,27 @@ const navLinks = [
 
 <script is:inline>
   const mobileMenu = document.querySelector('.mobile-menu');
+
   mobileMenu?.addEventListener('click', (event) => {
-    if (event.target.closest('a')) mobileMenu.removeAttribute('open');
+    if (event.target instanceof Element && event.target.closest('a')) {
+      mobileMenu.removeAttribute('open');
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (
+      mobileMenu?.open &&
+      event.target instanceof Node &&
+      !mobileMenu.contains(event.target)
+    ) {
+      mobileMenu.removeAttribute('open');
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobileMenu?.open) {
+      mobileMenu.removeAttribute('open');
+      mobileMenu.querySelector('summary')?.focus();
+    }
   });
 </script>

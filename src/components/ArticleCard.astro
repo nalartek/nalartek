@@ -1,0 +1,48 @@
+---
+import ArticleCover from './ArticleCover.astro';
+import CategoryBadge from './CategoryBadge.astro';
+import type { ArticleEntry } from '../lib/articles';
+import {
+  formatDate,
+  getArticlePath,
+  getReadingTime,
+  toIsoDate,
+} from '../lib/articles';
+
+interface Props {
+  article: ArticleEntry;
+  compact?: boolean;
+  eager?: boolean;
+}
+
+const { article, compact = false, eager = false } = Astro.props;
+const href = getArticlePath(article.data.slug);
+const readingTime = getReadingTime(article.body ?? '');
+---
+
+<article class:list={['article-card', { 'article-card--compact': compact }]}>
+  {!compact && <ArticleCover article={article} eager={eager} />}
+
+  <div class="article-card__content">
+    <div class="article-card__meta">
+      <CategoryBadge category={article.data.category} link={false} />
+      <time datetime={toIsoDate(article.data.pubDate)}>
+        {formatDate(article.data.pubDate)}
+      </time>
+      <span class="article-card__reading">{readingTime} menit baca</span>
+      {article.data.starter && <span class="starter-label">Starter</span>}
+    </div>
+
+    <h3 class="article-card__title">
+      <a href={href}>{article.data.title}</a>
+    </h3>
+
+    {!compact && (
+      <p class="article-card__excerpt">{article.data.description}</p>
+    )}
+
+    <span class="article-card__more" aria-hidden="true">
+      Baca artikel <span>↗</span>
+    </span>
+  </div>
+</article>

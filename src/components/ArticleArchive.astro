@@ -1,0 +1,70 @@
+---
+import ArticleCard from './ArticleCard.astro';
+import EmptyState from './EmptyState.astro';
+import Pagination from './Pagination.astro';
+import type { Category } from '../lib/categories';
+import type { ArticleEntry } from '../lib/articles';
+
+interface Props {
+  articles: ArticleEntry[];
+  totalArticles: number;
+  currentPage: number;
+  totalPages: number;
+  categoryStats: Array<Category & { count: number }>;
+}
+
+const {
+  articles,
+  totalArticles,
+  currentPage,
+  totalPages,
+  categoryStats,
+} = Astro.props;
+---
+
+<section class="archive-section" aria-labelledby="archive-heading">
+  <div class="container">
+    <div class="archive-toolbar">
+      <h2 id="archive-heading" class="archive-count">
+        {totalArticles} artikel
+      </h2>
+      <nav class="archive-filters" aria-label="Jelajahi kategori">
+        <a class="filter-chip is-active" href="/articles/" aria-current="true">
+          Semua
+        </a>
+        {categoryStats.map((category) => (
+          <a class="filter-chip" href={`/categories/${category.slug}/`}>
+            {category.name}
+            <span aria-hidden="true">{category.count}</span>
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    {
+      articles.length > 0 ? (
+        <div class="article-grid">
+          {articles.map((article, index) => (
+            <ArticleCard
+              article={article}
+              eager={currentPage === 1 && index === 0}
+            />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          title="Belum ada artikel yang terbit."
+          description="Arsip masih kosong. Artikel baru akan muncul di sini setelah melewati proses editorial."
+          href="/"
+          label="Kembali ke beranda"
+        />
+      )
+    }
+
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      basePath="/articles"
+    />
+  </div>
+</section>

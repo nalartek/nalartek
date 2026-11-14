@@ -1,8 +1,10 @@
 ---
+import { categories } from '../lib/categories';
+
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer" id="footer">
+<footer class="site-footer">
   <div class="container">
     <figure class="brand-banner">
       <img
@@ -11,7 +13,7 @@ const year = new Date().getFullYear();
         sizes="(max-width: 960px) calc(100vw - 40px), 920px"
         width="1440"
         height="600"
-        alt="NalarTek logo with the tagline Understand Technology. Build What Matters."
+        alt="Logo NalarTek dengan slogan Understand Technology. Build What Matters."
         loading="lazy"
         decoding="async"
       />
@@ -20,7 +22,7 @@ const year = new Date().getFullYear();
 
   <div class="container footer-main">
     <div class="footer-brand">
-      <a class="brand" href="/" aria-label="NalarTek home">
+      <a class="brand" href="/" aria-label="NalarTek — beranda">
         <img
           class="brand-logo"
           src="/images/nalartek-logo-128.png"
@@ -32,24 +34,41 @@ const year = new Date().getFullYear();
           loading="lazy"
           decoding="async"
         />
-        <span class="brand-wordmark">NALAR<span>TEK</span></span>
+        <span class="brand-wordmark" aria-hidden="true">NALAR<span>TEK</span></span>
       </a>
       <p class="footer-tagline">
-        Independent technology media exploring Android, engineering, software,
-        AI, and practical technology.
+        Media teknologi independen dari Indonesia. Membahas Android,
+        engineering, Linux, AI, software, dan inovasi secara praktis.
       </p>
     </div>
 
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <a href="#about">About</a>
-      <a href="#topics">Topics</a>
-      <a href="#latest">Articles</a>
-      <a href="#main">Back to top</a>
-    </nav>
+    <div class="footer-columns">
+      <nav class="footer-column" aria-label="Navigasi utama footer">
+        <h2 class="footer-heading">Jelajahi</h2>
+        <a href="/articles/">Semua artikel</a>
+        <a href="/categories/">Kategori</a>
+        <a href="/about/">Tentang NalarTek</a>
+        <a href="/contact/">Kontak</a>
+      </nav>
+
+      <nav class="footer-column" aria-label="Kategori footer">
+        <h2 class="footer-heading">Kategori</h2>
+        {categories.map((category) => (
+          <a href={`/categories/${category.slug}/`}>{category.name}</a>
+        ))}
+      </nav>
+
+      <nav class="footer-column" aria-label="Informasi editorial footer">
+        <h2 class="footer-heading">Editorial</h2>
+        <a href="/editorial-policy/">Kebijakan editorial</a>
+        <a href="/contact/">Koreksi & masukan</a>
+        <a href="/about/">Prinsip kami</a>
+      </nav>
+    </div>
   </div>
 
   <div class="container footer-bottom">
-    <span>© {year} NalarTek. All rights reserved.</span>
-    <span>Independent technology media</span>
+    <span>© {year} NalarTek. Hak cipta dilindungi.</span>
+    <a href="#top">Kembali ke atas ↑</a>
   </div>
 </footer>

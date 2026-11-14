@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Halaman tidak ditemukan"
+  description="Halaman yang Anda cari tidak ditemukan. Jelajahi arsip artikel dan kategori NalarTek."
+  noindex
+>
+  <section class="error-page" aria-labelledby="error-title">
+    <div class="container error-grid">
+      <div class="error-copy">
+        <p class="eyebrow">Error / 404</p>
+        <h1 id="error-title">Halaman ini tidak ditemukan.</h1>
+        <p>
+          Tautan mungkin sudah berubah, atau alamat yang dibuka tidak lengkap.
+          Arsip artikel dan kategori tetap dapat dijelajahi.
+        </p>
+        <div class="error-actions">
+          <a class="button button-primary" href="/articles/">
+            Buka arsip artikel <span aria-hidden="true">↗</span>
+          </a>
+          <a class="button button-secondary" href="/">Kembali ke beranda</a>
+        </div>
+      </div>
+
+      <div class="error-visual" aria-hidden="true">
+        <span class="error-number">404</span>
+        <span class="error-label">NALARTEK / LOST SIGNAL</span>
+        <span class="error-cross error-cross--one">+</span>
+        <span class="error-cross error-cross--two">+</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

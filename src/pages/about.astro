@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { categories } from '../lib/categories';
+
+const breadcrumbs = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Tentang' },
+];
+---
+
+<BaseLayout
+  title="Tentang"
+  description="NalarTek adalah media teknologi independen dari Indonesia yang membahas Android, engineering, Linux, AI, software, dan inovasi secara praktis."
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow="Tentang"
+    title="Teknologi perlu dipahami, bukan sekadar dikonsumsi."
+    description="NalarTek hadir untuk membantu pembaca membaca teknologi dengan lebih jernih: apa yang benar-benar berubah, apa yang perlu diuji, dan apa yang berguna dalam praktik."
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="section" aria-labelledby="misi-title">
+    <div class="container about-grid">
+      <div>
+        <p class="eyebrow">Misi</p>
+        <h2 class="content-title" id="misi-title">
+          Penjelasan yang bisa dipakai<span>.</span>
+        </h2>
+      </div>
+
+      <div class="about-copy">
+        <p class="lead">
+          NalarTek adalah media teknologi independen berbahasa Indonesia.
+          Fokusnya bukan mengejar setiap pengumuman, tetapi membantu pembaca
+          memahami cara kerja teknologi dan mengambil keputusan yang lebih baik.
+        </p>
+        <p>
+          Kami menulis tentang perangkat Android, sistem Linux, rekayasa
+          perangkat lunak, alat AI, standar terbuka, dan umur pakai perangkat.
+          Sudut pandangnya praktis: mulai dari pertanyaan yang nyata, jelaskan
+          konsep yang diperlukan, lalu tunjukkan langkah atau batasan yang
+          relevan.
+        </p>
+        <p>
+          NalarTek tidak mengklaim menjadi laboratorium uji independen atau
+          memiliki tim riset skala besar. Setiap tulisan adalah hasil
+          pengamatan, pembacaan dokumentasi, atau eksperimen kecil yang dapat
+          dijelaskan kembali. Ketika sesuatu belum diverifikasi, kami berusaha
+          mengatakannya dengan jelas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="fokus-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Fokus</p>
+          <h2 class="section-title" id="fokus-title">
+            Empat area belajar<span>.</span>
+          </h2>
+        </div>
+        <a class="text-link" href="/categories/">
+          Lihat semua kategori <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <div class="about-focus-grid">
+        {categories.map((category) => (
+          <a class="about-focus" href={`/categories/${category.slug}/`}>
+            <span class="about-focus__number">{category.number}</span>
+            <h3>{category.name}</h3>
+            <p>{category.description}</p>
+            <span class="about-focus__link" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="prinsip-title">
+    <div class="container about-grid">
+      <div>
+        <p class="eyebrow">Prinsip</p>
+        <h2 class="content-title" id="prinsip-title">
+          Cara kami bekerja<span>.</span>
+        </h2>
+      </div>
+
+      <div class="principle-list">
+        <section class="principle">
+          <span class="principle__number">01</span>
+          <div>
+            <h3>Pahami sebelum menyederhanakan</h3>
+            <p>
+              Penjelasan yang mudah tidak boleh menghilangkan detail penting.
+              Kami berusaha memisahkan konsep dasar, konteks, dan batasan agar
+              pembaca tahu apa yang sedang dipelajari.
+            </p>
+          </div>
+        </section>
+
+        <section class="principle">
+          <span class="principle__number">02</span>
+          <div>
+            <h3>Verifikasi klaim yang bisa diperiksa</h3>
+            <p>
+              Untuk klaim teknis, kami merujuk dokumentasi resmi atau sumber
+              primer bila tersedia. Sumber utama dicantumkan pada bagian
+              “Sumber” agar pembaca dapat memeriksa konteksnya.
+            </p>
+          </div>
+        </section>
+
+        <section class="principle">
+          <span class="principle__number">03</span>
+          <div>
+            <h3>Pisahkan fakta, pengalaman, dan opini</h3>
+            <p>
+              Pengalaman memakai alat dapat berguna, tetapi tidak otomatis
+              berlaku untuk semua orang. Opini editorial disampaikan sebagai
+              opini, dan rekomendasi tidak menggantikan pertimbangan pembaca.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="independensi-title">
+    <div class="container about-grid">
+      <div>
+        <p class="eyebrow">Independensi</p>
+        <h2 class="content-title" id="independensi-title">
+          Jelas soal kepentingan<span>.</span>
+        </h2>
+      </div>
+
+      <div class="about-copy">
+        <p>
+          NalarTek tidak menampilkan iklan atau artikel bersponsor yang
+          disamarkan sebagai tulisan editorial. Jika di masa depan ada bentuk
+          kerja sama komersial, penandaan akan dibuat jelas dan tidak mengubah
+          penilaian editorial.
+        </p>
+        <p>
+          Kami tidak menjual tautan, tidak menerima pembayaran untuk ulasan
+          positif, dan tidak mengarang angka penggunaan, pengguna, atau hasil
+          pengujian. Halaman ini akan diperbarui jika model operasional berubah.
+        </p>
+        <div class="about-actions">
+          <a class="button button-primary" href="/editorial-policy/">
+            Kebijakan editorial <span aria-hidden="true">↗</span>
+          </a>
+          <a class="button button-secondary" href="/contact/">
+            Hubungi NalarTek
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

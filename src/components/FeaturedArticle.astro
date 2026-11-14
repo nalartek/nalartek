@@ -1,0 +1,49 @@
+---
+import ArticleCover from './ArticleCover.astro';
+import CategoryBadge from './CategoryBadge.astro';
+import type { ArticleEntry } from '../lib/articles';
+import {
+  formatDate,
+  getArticlePath,
+  getReadingTime,
+  toIsoDate,
+} from '../lib/articles';
+
+interface Props {
+  article: ArticleEntry;
+  eager?: boolean;
+}
+
+const { article, eager = false } = Astro.props;
+const href = getArticlePath(article.data.slug);
+const readingTime = getReadingTime(article.body ?? '');
+---
+
+<article class="featured-article">
+  <div class="featured-article__content">
+    <div class="featured-article__meta">
+      <span class="featured-article__flag">Sorotan</span>
+      <CategoryBadge category={article.data.category} link={false} />
+      {article.data.starter && <span class="starter-label">Starter</span>}
+    </div>
+
+    <h3 class="featured-article__title">
+      <a href={href}>{article.data.title}</a>
+    </h3>
+
+    <p class="featured-article__excerpt">{article.data.description}</p>
+
+    <div class="featured-article__footer">
+      <time datetime={toIsoDate(article.data.pubDate)}>
+        {formatDate(article.data.pubDate)}
+      </time>
+      <span aria-hidden="true">·</span>
+      <span>{readingTime} menit baca</span>
+      <span class="featured-article__read" aria-hidden="true">
+        Baca sorotan <span>↗</span>
+      </span>
+    </div>
+  </div>
+
+  <ArticleCover article={article} eager={eager} class="featured-article__cover" />
+</article>

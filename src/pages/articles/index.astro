@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ArticleArchive from '../../components/ArticleArchive.astro';
+import {
+  PAGE_SIZE,
+  getCategoryStats,
+  getPublishedArticles,
+} from '../../lib/articles';
+
+const articles = await getPublishedArticles();
+const totalPages = Math.max(1, Math.ceil(articles.length / PAGE_SIZE));
+const categoryStats = getCategoryStats(articles);
+---
+
+<BaseLayout
+  title="Artikel"
+  description="Arsip artikel NalarTek tentang Android, Engineering & Linux, AI & Software, serta Technology & Innovation. Panduan dan analisis praktis yang dapat ditelusuri."
+  breadcrumbs={[
+    { label: 'Beranda', href: '/' },
+    { label: 'Artikel' },
+  ]}
+>
+  <PageHero
+    eyebrow="Arsip"
+    title="Artikel"
+    description="Panduan, catatan, dan analisis yang disusun untuk dipahami serta dipakai, bukan sekadar dibaca."
+    breadcrumbs={[
+      { label: 'Beranda', href: '/' },
+      { label: 'Artikel' },
+    ]}
+  >
+    <div class="page-hero__meta">
+      <span>{articles.length} artikel terbit</span>
+      <span aria-hidden="true">·</span>
+      <span>{categoryStats.length} kategori</span>
+    </div>
+  </PageHero>
+
+  <ArticleArchive
+    articles={articles.slice(0, PAGE_SIZE)}
+    totalArticles={articles.length}
+    currentPage={1}
+    totalPages={totalPages}
+    categoryStats={categoryStats}
+  />
+</BaseLayout>

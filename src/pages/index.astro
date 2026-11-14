@@ -1,79 +1,60 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import FeaturedArticle from '../components/FeaturedArticle.astro';
+import {
+  getCategoryStats,
+  getFeaturedArticles,
+  getLatestArticles,
+  getPublishedArticles,
+} from '../lib/articles';
 
-const categories = [
-  {
-    number: '01',
-    name: 'Android',
-    description: 'Understand your device. Get more out of Android.',
-    href: '#latest',
-  },
-  {
-    number: '02',
-    name: 'Technical',
-    description: 'Termux, automation, Linux, root, and engineering.',
-    href: '#latest',
-  },
-  {
-    number: '03',
-    name: 'AI & Tools',
-    description: 'Explore useful AI, software, and digital tools.',
-    href: '#latest',
-  },
-];
-
-const articles = [
-  {
-    category: 'Android',
-    title: 'Make your Android device work smarter',
-    description: 'Practical guides, troubleshooting, and ways to get more from your device.',
-    number: '01',
-  },
-  {
-    category: 'Technical',
-    title: 'Build, automate, and understand technology',
-    description: 'Explore Termux, command-line tools, scripting, and practical engineering.',
-    number: '02',
-  },
-  {
-    category: 'AI & Tools',
-    title: 'Find the tools that make a difference',
-    description: 'Understand AI tools and learn how to use them in real workflows.',
-    number: '03',
-  },
-];
+const articles = await getPublishedArticles();
+const featured = getFeaturedArticles(articles, 3);
+const leadArticle = featured[0];
+const secondaryFeatured = featured.slice(1);
+const latest = getLatestArticles(
+  articles,
+  3,
+  featured.map((article) => article.data.slug),
+);
+const categoryStats = getCategoryStats(articles);
 ---
 
-<BaseLayout>
+<BaseLayout
+  description="NalarTek adalah media teknologi independen dari Indonesia. Baca panduan dan analisis praktis tentang Android, engineering, Linux, AI, software, dan inovasi."
+>
   <section class="hero" aria-labelledby="hero-title">
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">
           <span class="status-dot" aria-hidden="true"></span>
-          Independent technology media
+          Media teknologi independen
         </p>
 
         <h1 id="hero-title">
-          Understand<br />
-          technology.<br />
-          <span>Build what<br />matters.</span>
+          Pahami<br />
+          teknologi.<br />
+          <span>Bangun yang<br />berarti.</span>
         </h1>
 
         <p class="hero-lede">
-          Exploring technology through practical knowledge, independent research,
-          and real-world experimentation.
+          Panduan dan analisis praktis tentang Android, engineering, Linux,
+          AI, software, serta inovasi yang berdampak nyata.
         </p>
 
         <div class="hero-actions">
-          <a class="button button-primary" href="#topics">
-            Explore topics <span aria-hidden="true">↗</span>
+          <a class="button button-primary" href="/articles/">
+            Jelajahi artikel <span aria-hidden="true">↗</span>
           </a>
-          <a class="button button-secondary" href="#about">About NalarTek</a>
+          <a class="button button-secondary" href="/about/">
+            Tentang NalarTek
+          </a>
         </div>
 
         <p class="hero-note">
           <span aria-hidden="true"></span>
-          Tested. Explained. Documented.
+          Dipahami. Diuji. Didokumentasikan.
         </p>
       </div>
 
@@ -89,10 +70,13 @@ const articles = [
             alt=""
             loading="eager"
             decoding="async"
+            fetchpriority="high"
           />
         </div>
         <span class="visual-label label-top">NALARTEK / MARK 001</span>
-        <span class="visual-label label-bottom">ANDROID · ENGINEERING · AI</span>
+        <span class="visual-label label-bottom">
+          ANDROID · LINUX · AI · INNOVATION
+        </span>
         <span class="visual-cross cross-one">+</span>
         <span class="visual-cross cross-two">+</span>
       </div>
@@ -101,50 +85,97 @@ const articles = [
     <div class="container hero-footer" aria-hidden="true">
       <span>01</span>
       <span class="index-line"></span>
-      <span>03</span>
+      <span>04</span>
     </div>
   </section>
 
-  <section class="intro" id="about" aria-labelledby="about-title">
-    <div class="container intro-grid">
-      <p class="eyebrow">01 / Who we are</p>
-      <div class="intro-content">
-        <h2 id="about-title">
-          Technology is more than information.
-          <span>It's something to understand, test, and build.</span>
-        </h2>
-        <p>
-          NalarTek is an independent technology media platform focused on making
-          complex technology easier to understand and practical to use. We explore
-          the details, test ideas, and document what we learn.
-        </p>
-      </div>
-    </div>
-  </section>
+  {
+    leadArticle && (
+      <section class="section featured-section" aria-labelledby="featured-title">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">01 / Sorotan</p>
+              <h2 class="section-title" id="featured-title">
+                Yang layak dibaca<span>.</span>
+              </h2>
+            </div>
+            <a class="text-link" href="/articles/">
+              Semua artikel <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div
+            class:list={[
+              'featured-layout',
+              { 'featured-layout--single': secondaryFeatured.length === 0 },
+            ]}
+          >
+            <FeaturedArticle article={leadArticle} />
+            {secondaryFeatured.length > 0 && (
+              <div class="featured-side">
+                {secondaryFeatured.map((article) => (
+                  <ArticleCard article={article} compact />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    latest.length > 0 && (
+      <section class="section" aria-labelledby="latest-title">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">02 / Terbaru</p>
+              <h2 class="section-title" id="latest-title">
+                Catatan terbaru<span>.</span>
+              </h2>
+            </div>
+            <p class="section-description">
+              Tulisan baru dari ruang belajar dan eksperimen NalarTek.
+            </p>
+          </div>
+
+          <div class="article-grid">
+            {latest.map((article) => (
+              <ArticleCard article={article} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <section class="section" id="topics" aria-labelledby="topics-title">
     <div class="container">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">02 / Explore</p>
-          <h2 class="section-title" id="topics-title">Areas of focus<span>.</span></h2>
+          <p class="eyebrow">03 / Kategori</p>
+          <h2 class="section-title" id="topics-title">
+            Area fokus<span>.</span>
+          </h2>
         </div>
-        <p class="section-description">
-          Practical knowledge for curious minds and independent builders.
-        </p>
+        <a class="text-link" href="/categories/">
+          Jelajahi kategori <span aria-hidden="true">↗</span>
+        </a>
       </div>
 
       <div class="category-grid">
-        {categories.map((category) => (
-          <a class="category-card" href={category.href}>
+        {categoryStats.map((category) => (
+          <a class="category-card" href={`/categories/${category.slug}/`}>
             <div class="category-top">
-              <span>{category.number} / Topic</span>
+              <span>{category.number} / Kategori</span>
               <span class="category-arrow" aria-hidden="true">↗</span>
             </div>
             <h3>{category.name}</h3>
             <p>{category.description}</p>
             <div class="category-bottom">
-              <span>Explore</span>
+              <span>{category.count} artikel</span>
               <span class="bottom-line" aria-hidden="true"></span>
             </div>
           </a>
@@ -153,529 +184,20 @@ const articles = [
     </div>
   </section>
 
-  <section class="section" id="latest" aria-labelledby="latest-title">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">03 / Knowledge</p>
-          <h2 class="section-title" id="latest-title">Ideas into practice<span>.</span></h2>
-        </div>
-        <span class="coming-soon">Content in development</span>
-      </div>
-
-      <div class="article-list">
-        {articles.map((article) => (
-          <article class="article-card">
-            <div class="article-number">{article.number}</div>
-            <div class="article-content">
-              <div class="article-category">{article.category}</div>
-              <h3>{article.title}</h3>
-              <p>{article.description}</p>
-            </div>
-            <span class="article-arrow" aria-hidden="true">↗</span>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <section class="manifesto" aria-labelledby="manifesto-title">
     <div class="container">
-      <p class="eyebrow">NalarTek principle</p>
+      <p class="eyebrow">Prinsip NalarTek</p>
       <h2 id="manifesto-title">
-        Don't just consume technology.<br />
-        <span>Understand it. Build with it.</span>
+        Jangan hanya memakai teknologi.<br />
+        <span>Pahami. Uji. Bangun.</span>
       </h2>
-      <p>Independent thinking. Practical knowledge. Meaningful innovation.</p>
+      <p>
+        NalarTek adalah media teknologi independen yang menempatkan pemahaman,
+        verifikasi, dan penggunaan praktis di atas kebisingan.
+      </p>
+      <a class="text-link manifesto-link" href="/about/">
+        Baca prinsip editorial <span aria-hidden="true">↗</span>
+      </a>
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .hero {
-    position: relative;
-    padding-block: clamp(72px, 9vw, 116px) clamp(54px, 7vw, 84px);
-    border-bottom: 1px solid var(--line);
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: "";
-    position: absolute;
-    top: -30%;
-    right: -10%;
-    width: 70vw;
-    max-width: 900px;
-    aspect-ratio: 1;
-    background: radial-gradient(circle, rgba(56, 191, 211, 0.11), transparent 66%);
-    pointer-events: none;
-  }
-
-  .hero-grid {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    align-items: center;
-    gap: clamp(42px, 6vw, 84px);
-  }
-
-  .status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--cyan);
-    box-shadow: 0 0 0 4px rgba(56, 191, 211, 0.12);
-  }
-
-  h1 {
-    margin: 22px 0 0;
-    font-size: clamp(46px, 6.2vw, 82px);
-    font-weight: 800;
-    letter-spacing: -0.052em;
-    line-height: 1.02;
-  }
-
-  h1 span {
-    color: var(--cyan);
-  }
-
-  .hero-lede {
-    max-width: 470px;
-    margin: 27px 0 32px;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.85;
-  }
-
-  .hero-actions {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .hero-note {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: clamp(42px, 6vw, 68px) 0 0;
-    color: var(--muted);
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
-
-  .hero-note span {
-    width: 32px;
-    height: 1px;
-    background: var(--cyan);
-  }
-
-  .hero-visual {
-    position: relative;
-    display: grid;
-    width: 100%;
-    max-width: 450px;
-    aspect-ratio: 1;
-    place-items: center;
-    margin-inline: auto;
-    border: 1px solid var(--line);
-    background: radial-gradient(circle at 50% 46%, #1a3855 0%, #142740 47%, #101d32 78%);
-    overflow: hidden;
-  }
-
-  .visual-grid {
-    position: absolute;
-    inset: 0;
-    opacity: 0.3;
-    background-image:
-      linear-gradient(rgba(137, 152, 170, 0.2) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(137, 152, 170, 0.2) 1px, transparent 1px);
-    background-size: 34px 34px;
-    -webkit-mask-image: radial-gradient(circle, #000 20%, transparent 78%);
-    mask-image: radial-gradient(circle, #000 20%, transparent 78%);
-  }
-
-  .visual-orbit {
-    position: absolute;
-    width: 76%;
-    aspect-ratio: 1;
-    border: 1px solid rgba(56, 191, 211, 0.3);
-    border-radius: 50%;
-  }
-
-  .orbit-two {
-    width: 54%;
-    border-color: rgba(232, 238, 245, 0.22);
-  }
-
-  .hero-logo-frame {
-    position: relative;
-    z-index: 2;
-    padding: clamp(10px, 1.5vw, 18px);
-    border: 1px solid rgba(56, 191, 211, 0.42);
-    background: var(--navy);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
-  }
-
-  .hero-logo-frame img {
-    width: clamp(200px, 26vw, 320px);
-  }
-
-  .visual-label {
-    position: absolute;
-    z-index: 3;
-    color: var(--muted);
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-  }
-
-  .label-top {
-    top: 20px;
-    left: 20px;
-  }
-
-  .label-bottom {
-    right: 20px;
-    bottom: 20px;
-  }
-
-  .visual-cross {
-    position: absolute;
-    z-index: 3;
-    color: var(--cyan);
-    font-size: 17px;
-    line-height: 1;
-  }
-
-  .cross-one {
-    top: 24%;
-    right: 19%;
-  }
-
-  .cross-two {
-    bottom: 23%;
-    left: 18%;
-  }
-
-  .hero-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: clamp(34px, 5vw, 52px);
-    color: var(--muted);
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-  }
-
-  .hero-footer span:first-child {
-    color: var(--cyan);
-  }
-
-  .index-line {
-    width: 46px;
-    height: 1px;
-    background: var(--muted);
-  }
-
-  .intro {
-    padding-block: clamp(72px, 9vw, 108px);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .intro-grid {
-    display: grid;
-    grid-template-columns: 0.52fr 1.48fr;
-    gap: clamp(28px, 5vw, 64px);
-  }
-
-  .intro-content h2 {
-    max-width: 760px;
-    margin: 0;
-    font-size: clamp(29px, 4vw, 46px);
-    font-weight: 700;
-    letter-spacing: -0.038em;
-    line-height: 1.24;
-  }
-
-  .intro-content h2 span {
-    color: var(--cyan);
-  }
-
-  .intro-content p {
-    max-width: 650px;
-    margin: 24px 0 0;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.9;
-  }
-
-  .section {
-    padding-block: clamp(72px, 9vw, 104px);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .section-heading {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 30px;
-    margin-bottom: 38px;
-  }
-
-  .section-title {
-    margin: 12px 0 0;
-    font-size: clamp(30px, 4vw, 44px);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 1.15;
-  }
-
-  .section-title span {
-    color: var(--cyan);
-  }
-
-  .section-description {
-    max-width: 300px;
-    margin: 0;
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-
-  .category-card {
-    display: flex;
-    min-height: 238px;
-    flex-direction: column;
-    padding: 24px;
-    border: 1px solid var(--line);
-    background: rgba(22, 39, 63, 0.5);
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-  }
-
-  .category-card:hover {
-    border-color: var(--cyan);
-    background: rgba(22, 39, 63, 0.82);
-    transform: translateY(-4px);
-  }
-
-  .category-top,
-  .category-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  .category-arrow,
-  .article-arrow {
-    color: var(--cyan);
-    font-size: 19px;
-    line-height: 1;
-  }
-
-  .category-card h3 {
-    margin: 36px 0 8px;
-    font-size: 23px;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-  }
-
-  .category-card p {
-    margin: 0 0 26px;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.8;
-  }
-
-  .category-bottom {
-    margin-top: auto;
-  }
-
-  .bottom-line {
-    width: 38px;
-    height: 1px;
-    background: var(--cyan);
-  }
-
-  .coming-soon {
-    flex: none;
-    padding: 7px 10px;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .article-list {
-    border-top: 1px solid var(--line);
-  }
-
-  .article-card {
-    display: grid;
-    grid-template-columns: 56px 1fr 24px;
-    align-items: center;
-    gap: 20px;
-    padding: 26px 5px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .article-number {
-    color: var(--cyan);
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .article-category {
-    color: var(--cyan);
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  .article-content h3 {
-    margin: 7px 0;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-
-  .article-content p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 11px;
-  }
-
-  .manifesto {
-    position: relative;
-    padding-block: clamp(80px, 10vw, 118px);
-    border-bottom: 1px solid var(--line);
-    background:
-      radial-gradient(circle at 50% 0%, rgba(56, 191, 211, 0.1), transparent 58%),
-      var(--navy-soft);
-    text-align: center;
-    overflow: hidden;
-  }
-
-  .manifesto .eyebrow {
-    justify-content: center;
-  }
-
-  .manifesto h2 {
-    margin: 24px 0 15px;
-    font-size: clamp(28px, 4.5vw, 49px);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 1.24;
-  }
-
-  .manifesto h2 span {
-    color: var(--cyan);
-  }
-
-  .manifesto p:last-child {
-    margin: 0;
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  @media (max-width: 900px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-      gap: 52px;
-    }
-
-    .hero-copy {
-      max-width: 620px;
-    }
-
-    .hero-visual {
-      max-width: 390px;
-    }
-
-    .hero-lede {
-      max-width: 520px;
-    }
-
-    .hero-footer {
-      justify-content: flex-start;
-    }
-
-    .intro-grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-  }
-
-  @media (max-width: 760px) {
-    .hero {
-      padding-block: 62px 48px;
-    }
-
-    h1 {
-      font-size: clamp(43px, 12vw, 64px);
-      letter-spacing: -0.045em;
-    }
-
-    .hero-lede {
-      margin-top: 22px;
-      font-size: 14px;
-    }
-
-    .hero-note {
-      margin-top: 38px;
-    }
-
-    .hero-visual {
-      max-width: 340px;
-    }
-
-    .hero-logo-frame img {
-      width: 190px;
-    }
-
-    .section-heading {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .category-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .category-card {
-      min-height: 208px;
-    }
-
-    .article-card {
-      grid-template-columns: 28px 1fr 16px;
-      gap: 10px;
-    }
-
-    .article-content h3 {
-      font-size: 15px;
-    }
-
-    .article-content p {
-      font-size: 10px;
-    }
-  }
-</style>

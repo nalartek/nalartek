@@ -1,0 +1,25 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import type { BreadcrumbItem } from '../lib/seo';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  breadcrumbs?: BreadcrumbItem[];
+}
+
+const { eyebrow, title, description, breadcrumbs } = Astro.props;
+---
+
+<header class="page-hero">
+  <div class="container">
+    {breadcrumbs && breadcrumbs.length > 0 && (
+      <Breadcrumbs items={breadcrumbs} />
+    )}
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    {description && <p class="page-hero__description">{description}</p>}
+    <slot />
+  </div>
+</header>

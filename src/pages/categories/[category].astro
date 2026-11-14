@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import PageHero from '../../components/PageHero.astro';
+import {
+  getCategoryArticles,
+  getPublishedArticles,
+  type ArticleEntry,
+} from '../../lib/articles';
+import { categories, type Category } from '../../lib/categories';
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+
+  return categories.map((category) => ({
+    params: { category: category.slug },
+    props: {
+      category,
+      articles: getCategoryArticles(articles, category.slug),
+    },
+  }));
+}
+
+interface Props {
+  category: Category;
+  articles: ArticleEntry[];
+}
+
+const { category, articles } = Astro.props;
+
+const breadcrumbs = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Kategori', href: '/categories/' },
+  { label: category.name },
+];
+---
+
+<BaseLayout
+  title={category.name}
+  description={`${category.description} Baca ${articles.length} artikel NalarTek dalam kategori ${category.name}.`}
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow={`Kategori ${category.number}`}
+    title={category.name}
+    description={category.description}
+    breadcrumbs={breadcrumbs}
+  >
+    <div class="page-hero__meta">
+      <span>{articles.length} artikel</span>
+      <span aria-hidden="true">·</span>
+      <a href="/articles/">Lihat seluruh arsip</a>
+    </div>
+  </PageHero>
+
+  <section class="section category-archive" aria-labelledby="category-articles">
+    <div class="container">
+      <div class="archive-toolbar">
+        <h2 class="archive-count" id="category-articles">
+          Artikel {category.name}
+        </h2>
+        <nav class="archive-filters" aria-label="Pindah kategori">
+          <a class="filter-chip" href="/articles/">Semua</a>
+          {categories.map((item) => (
+            <a
+              class="filter-chip"
+              href={`/categories/${item.slug}/`}
+              aria-current={item.slug === category.slug ? 'page' : undefined}
+            >
+              {item.name}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      {articles.length > 0 ? (
+        <div class="article-grid">
+          {articles.map((article) => (
+            <ArticleCard article={article} />
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          title={`Belum ada artikel ${category.name}.`}
+          description="Kategori ini sudah tersedia, tetapi artikelnya belum terbit. Kembali ke arsip untuk membaca topik lain."
+          href="/articles/"
+          label="Buka semua artikel"
+        />
+      )}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,78 @@
+---
+import { getArchivePagePath } from '../lib/articles';
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  basePath?: string;
+}
+
+const { currentPage, totalPages, basePath = '/articles' } = Astro.props;
+
+const visiblePages = Array.from(
+  new Set([1, currentPage - 1, currentPage, currentPage + 1, totalPages]),
+)
+  .filter((page) => page >= 1 && page <= totalPages)
+  .sort((a, b) => a - b);
+---
+
+{
+  totalPages > 1 && (
+    <nav class="pagination" aria-label="Navigasi halaman artikel">
+      {currentPage > 1 ? (
+        <a
+          class="pagination__direction"
+          href={getArchivePagePath(currentPage - 1, basePath)}
+          rel="prev"
+        >
+          <span aria-hidden="true">←</span> Sebelumnya
+        </a>
+      ) : (
+        <span class="pagination__direction pagination__direction--disabled">
+          <span aria-hidden="true">←</span> Sebelumnya
+        </span>
+      )}
+
+      <ol class="pagination__pages">
+        {visiblePages.map((page, index) => (
+          <Fragment>
+            {index > 0 && page - visiblePages[index - 1] > 1 && (
+              <li class="pagination__ellipsis" aria-hidden="true">
+                …
+              </li>
+            )}
+            <li>
+              {page === currentPage ? (
+                <span class="pagination__page is-current" aria-current="page">
+                  {page}
+                </span>
+              ) : (
+                <a
+                  class="pagination__page"
+                  href={getArchivePagePath(page, basePath)}
+                  aria-label={`Halaman ${page}`}
+                >
+                  {page}
+                </a>
+              )}
+            </li>
+          </Fragment>
+        ))}
+      </ol>
+
+      {currentPage < totalPages ? (
+        <a
+          class="pagination__direction"
+          href={getArchivePagePath(currentPage + 1, basePath)}
+          rel="next"
+        >
+          Berikutnya <span aria-hidden="true">→</span>
+        </a>
+      ) : (
+        <span class="pagination__direction pagination__direction--disabled">
+          Berikutnya <span aria-hidden="true">→</span>
+        </span>
+      )}
+    </nav>
+  )
+}

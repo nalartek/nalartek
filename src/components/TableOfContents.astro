@@ -1,0 +1,27 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const items = headings.filter(
+  (heading) => heading.depth === 2 || heading.depth === 3,
+);
+---
+
+{
+  items.length >= 3 && (
+    <nav class="toc" aria-label="Daftar isi">
+      <p class="toc__heading">Daftar isi</p>
+      <ol>
+        {items.map((heading) => (
+          <li class:list={[{ 'toc__item--nested': heading.depth === 3 }]}>
+            <a href={`#${heading.slug}`}>{heading.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

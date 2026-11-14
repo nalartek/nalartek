@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const breadcrumbs = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Kebijakan editorial' },
+];
+
+const sections = [
+  { id: 'ruang-lingkup', label: 'Ruang lingkup' },
+  { id: 'sumber', label: 'Sumber & verifikasi' },
+  { id: 'ai', label: 'Penggunaan AI' },
+  { id: 'starter', label: 'Konten starter' },
+  { id: 'koreksi', label: 'Koreksi' },
+  { id: 'independensi', label: 'Independensi' },
+  { id: 'batasan', label: 'Batasan panduan' },
+];
+---
+
+<BaseLayout
+  title="Kebijakan editorial"
+  description="Kebijakan editorial NalarTek tentang sumber, verifikasi, penggunaan AI, koreksi, independensi, dan batasan panduan teknis."
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow="Editorial"
+    title="Kebijakan editorial"
+    description="Standar yang kami pakai untuk memutuskan apa yang layak diterbitkan, bagaimana klaim diperiksa, dan bagaimana koreksi ditangani."
+    breadcrumbs={breadcrumbs}
+  >
+    <div class="page-hero__meta">
+      <span>Diperbarui 14 November 2026</span>
+      <span aria-hidden="true">·</span>
+      <a href="/contact/">Sampaikan koreksi</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container policy-layout">
+      <aside class="policy-nav" aria-label="Daftar bagian kebijakan">
+        <span class="policy-nav__label">Di halaman ini</span>
+        <nav>
+          {sections.map((section) => (
+            <a href={`#${section.id}`}>{section.label}</a>
+          ))}
+        </nav>
+      </aside>
+
+      <div class="policy-content">
+        <section id="ruang-lingkup" class="policy-section">
+          <span class="policy-section__number">01</span>
+          <div>
+            <h2>Ruang lingkup</h2>
+            <p>
+              NalarTek menerbitkan tulisan berbahasa Indonesia tentang Android,
+              engineering dan Linux, AI dan perangkat lunak, serta standar dan
+              inovasi teknologi. Tulisan dapat berupa penjelasan konsep,
+              panduan langkah demi langkah, catatan eksperimen, atau analisis.
+            </p>
+            <p>
+              Jenis tulisan harus jelas dari judul, pembuka, dan isinya. Panduan
+              tidak dipresentasikan sebagai liputan peristiwa. Analisis tidak
+              dipresentasikan sebagai hasil pengujian laboratorium.
+            </p>
+          </div>
+        </section>
+
+        <section id="sumber" class="policy-section">
+          <span class="policy-section__number">02</span>
+          <div>
+            <h2>Sumber dan verifikasi</h2>
+            <p>
+              Untuk klaim teknis yang dapat diperiksa, prioritas diberikan pada
+              dokumentasi resmi, spesifikasi, makalah, dan pengumuman penerbit
+              asli. Sumber sekunder dipakai untuk konteks dan harus disebut
+              sebagai sumber sekunder.
+            </p>
+            <p>
+              Kami berusaha membuka sumber sebelum mengutipnya. Nama dokumen,
+              angka, tanggal, dan kutipan tidak boleh direkayasa. Jika sebuah
+              klaim belum dapat diverifikasi, klaim itu tidak disajikan sebagai
+              fakta pasti.
+            </p>
+            <p>
+              Pengalaman pribadi dan opini diberi label yang sesuai. Pengalaman
+              pada satu perangkat atau versi perangkat lunak tidak otomatis
+              digeneralisasi ke semua lingkungan.
+            </p>
+          </div>
+        </section>
+
+        <section id="ai" class="policy-section">
+          <span class="policy-section__number">03</span>
+          <div>
+            <h2>Penggunaan AI</h2>
+            <p>
+              Alat AI dapat membantu menyusun kerangka, merapikan bahasa, atau
+              memeriksa konsistensi. Alat AI tidak menjadi sumber fakta dan
+              tidak boleh menghasilkan kutipan, tautan, atau atribusi yang tidak
+              diverifikasi manusia.
+            </p>
+            <p>
+              Setiap klaim faktual tetap diperiksa terhadap sumber aslinya.
+              NalarTek tidak menerbitkan tulisan yang seluruh isinya diserahkan
+              kepada model bahasa tanpa penyuntingan dan verifikasi.
+            </p>
+          </div>
+        </section>
+
+        <section id="starter" class="policy-section">
+          <span class="policy-section__number">04</span>
+          <div>
+            <h2>Konten starter</h2>
+            <p>
+              Sebagian artikel pada tahap awal situs diberi label
+              <strong>Starter</strong>. Label ini berarti artikel ditulis sebagai
+              contoh awal untuk menguji alur publikasi, bukan liputan peristiwa
+              terkini dan bukan hasil pengujian jangka panjang.
+            </p>
+            <p>
+              Konten starter tetap mengikuti aturan sumber dan verifikasi. Label
+              akan dihapus hanya setelah artikel ditinjau ulang dan
+              diperbarui sesuai standar editorial yang berlaku.
+            </p>
+          </div>
+        </section>
+
+        <section id="koreksi" class="policy-section">
+          <span class="policy-section__number">05</span>
+          <div>
+            <h2>Koreksi dan pembaruan</h2>
+            <p>
+              Koreksi yang terverifikasi akan mengubah artikel pada bagian yang
+              salah. Untuk perubahan yang memengaruhi kesimpulan, artikel diberi
+              catatan pembaruan dan tanggal revisi. Kesalahan ketik kecil dapat
+              diperbaiki tanpa catatan terpisah.
+            </p>
+            <p>
+              Kirim laporan melalui halaman <a href="/contact/">Kontak</a> dengan
+              URL, kutipan bagian yang bermasalah, dan sumber pendukung. Kami
+              tidak menjanjikan waktu respons tertentu, tetapi laporan yang
+              spesifik akan ditinjau.
+            </p>
+          </div>
+        </section>
+
+        <section id="independensi" class="policy-section">
+          <span class="policy-section__number">06</span>
+          <div>
+            <h2>Independensi dan kepentingan</h2>
+            <p>
+              NalarTek tidak menampilkan iklan atau artikel bersponsor yang
+              disamarkan sebagai tulisan editorial. Tidak ada pembayaran untuk
+              ulasan positif, peringkat, atau tautan.
+            </p>
+            <p>
+              Jika di masa depan ada kerja sama komersial, hubungan itu akan
+              diungkapkan secara jelas di dekat konten terkait. Keputusan
+              editorial tidak boleh bergantung pada sponsor.
+            </p>
+          </div>
+        </section>
+
+        <section id="batasan" class="policy-section">
+          <span class="policy-section__number">07</span>
+          <div>
+            <h2>Batasan panduan teknis</h2>
+            <p>
+              Perintah, konfigurasi, dan prosedur dapat berbeda menurut versi
+              sistem, perangkat, dan lingkungan. Pembaca bertanggung jawab
+              memeriksa dokumentasi yang sesuai dan membuat cadangan sebelum
+              melakukan perubahan yang berisiko.
+            </p>
+            <p>
+              Artikel NalarTek bersifat informasional dan tidak menggantikan
+              dukungan resmi produsen, penilaian profesional keamanan, atau
+              konsultasi hukum.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
