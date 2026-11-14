@@ -1,9 +1,10 @@
+
 ---
 title: "Dasar systemd: Unit, Service, dan Log Tanpa Kebingungan"
 description: "Pengantar praktis untuk memahami unit systemd, menjalankan service, membaca journal, dan mengenali kesalahan konfigurasi yang umum."
 slug: "dasar-systemd-unit-service-log"
 pubDate: 2026-11-06
-updatedDate: 2026-11-09
+updatedDate: 2026-11-14
 author: "NalarTek Editorial"
 category: "engineering-linux"
 tags:
@@ -14,45 +15,109 @@ featured: true
 starter: true
 ---
 
-systemd sering terasa rumit karena ia menyentuh banyak bagian sistem: boot, service, log, timer, dan manajemen perangkat. Namun sebagian besar pekerjaan sehari-hari dapat dipahami dengan beberapa konsep dasar. Artikel ini membahas unit, service, dan journal tanpa masuk ke konfigurasi yang terlalu spesifik untuk satu distribusi.
+Bagi banyak orang yang baru masuk ke dunia Linux, `systemd` sering terasa seperti kotak hitam yang rumit. Ia menyentuh hampir semua bagian sistem: proses *boot*, manajemen *service* (layanan), log, penjadwalan (timer), dan manajemen perangkat keras.
 
-## Apa yang dikelola systemd
+Namun, untuk kebutuhan sehari-hari sebagai pengguna maupun *developer*, kita hanya perlu memahami beberapa konsep dasar. Artikel ini membahas cara kerja unit, file *service*, dan cara membaca log tanpa harus menghafal seluruh dokumentasi.
 
-systemd mengelola banyak hal melalui unit. Unit adalah deskripsi terstruktur tentang sesuatu yang harus dijalankan atau dikelola sistem. Unit service menjelaskan proses yang harus berjalan, unit timer menjelaskan jadwal, dan unit mount menjelaskan titik mount. Nama unit biasanya berakhiran sesuai tipenya, misalnya `.service` atau `.timer`.
+## Apa yang dikelola systemd?
 
-Perintah `systemctl` menjadi pintu masuk untuk memeriksa dan mengubah status unit. Saat service bermasalah, langkah pertama bukan mengedit file konfigurasi, melainkan membaca status dan log. Kesalahan sering terlihat jelas di sana.
+`systemd` mengelola banyak hal melalui apa yang disebut **Unit**. Unit adalah file konfigurasi terstruktur yang mendeskripsikan sesuatu yang harus dijalankan atau dikelola oleh sistem. Nama unit biasanya berakhiran sesuai dengan tipenya:
+- **`.service`**: Menjalankan proses di latar belakang (misalnya server web Nginx atau aplikasi Node.js).
+- **`.timer`**: Menjalankan tugas terjadwal (pengganti `cron`).
+- **`.mount`**: Mengelola titik *mount* (seperti *flashdisk* atau *hard disk*).
 
-```bash
-systemctl status nama-service.service
-journalctl -u nama-service.service --no-pager -n 50
+Perintah `systemctl` adalah pintu masuk utama untuk berinteraksi dengan unit-unit ini.
+
+## Anatomi File Unit Service
+
+Mari kita bedah file `.service`. File ini biasanya diletakkan di `/etc/systemd/system/nama-aplikasi.service`. Berikut adalah contoh nyata file *service* untuk menjalankan aplikasi Node.js sederhana:
+
+```ini
+[Unit]
+Description=Aplikasi Node.js NalarTek
+After=network.target
+
+[Service]
+User=nalartek
+WorkingDirectory=/home/nalartek/app
+ExecStart=/usr/bin/node /home/nalartek/app/index.js
+Restart=on-failure
+RestartSec=5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-Gunakan nama yang benar dan perhatikan apakah unit aktif, gagal, atau hanya tidak ditemukan. Status “failed” tidak selalu berarti aplikasi rusak; bisa jadi file konfigurasi tidak ditemukan atau izin akses salah.
+Mari bedah bagian-bagiannya:
 
-## Membaca unit service
+· [Unit]: Mendefinisikan metadata. After=network.target memastikan aplikasi baru berjalan setelah jaringan internet aktif.
+· [Service]: Bagian inti.
+  · User: Menentukan sebagai pengguna mana aplikasi berjalan (sangat disarankan bukan root demi keamanan).
+  · WorkingDirectory: Folder tempat perintah dieksekusi.
+  · ExecStart: Perintah mutlak yang dijalankan. Gunakan path absolut (seperti /usr/bin/node), bukan hanya node. Ini karena service tidak mengenali variabel $PATH seperti di terminal biasa.
+  · Restart: on-failure berarti sistem akan mencoba restart jika aplikasi crash, tetapi tidak akan restart jika Anda menghentikannya secara manual.
+· [Install]: Menentukan kapan service dinyalakan. multi-user.target berarti aplikasi berjalan otomatis saat sistem masuk ke mode teks (normal).
 
-File unit terdiri dari beberapa bagian, seperti `[Unit]`, `[Service]`, dan `[Install]`. Bagian `[Unit]` menjelaskan hubungan dengan unit lain. Bagian `[Service]` menentukan perintah yang dijalankan dan cara systemd mengawasi proses. Bagian `[Install]` menentukan kapan unit diaktifkan.
+Perintah systemctl yang Wajib Diketahui
 
-Untuk service sederhana, perhatikan `ExecStart`, `WorkingDirectory`, dan `User`. Kesalahan pada salah satu bagian ini dapat membuat service gagal berjalan meskipun perintahnya benar saat dijalankan manual. Perbedaan lingkungan juga penting: service tidak selalu mewarisi variabel shell yang sama dengan terminal interaktif.
+Setelah file dibuat, Anda tidak bisa langsung menjalankannya. Berikut adalah alur kerjanya:
 
-Setelah mengubah file unit, jalankan `systemctl daemon-reload`, lalu restart service. Jika service masih gagal, baca ulang log dan periksa apakah ada pesan tentang file yang tidak ditemukan atau izin yang ditolak.
+1. Muat ulang konfigurasi (wajib dilakukan setiap kali Anda mengedit file .service):
+   ```bash
+   sudo systemctl daemon-reload
+   ```
+2. Menjalankan service:
+   ```bash
+   sudo systemctl start nama-aplikasi.service
+   ```
+3. Menghentikan service:
+   ```bash
+   sudo systemctl stop nama-aplikasi.service
+   ```
+4. Menyalakan otomatis saat boot:
+   ```bash
+   sudo systemctl enable nama-aplikasi.service
+   ```
+   (Tips: Anda bisa menggabungkan enable dan start sekaligus dengan sudo systemctl enable --now nama-aplikasi.service).
+5. Melihat status:
+   ```bash
+   sudo systemctl status nama-aplikasi.service
+   ```
 
-## Membaca journal
+Membaca Log dengan journalctl
 
-`journalctl` menampilkan log yang dikumpulkan systemd. Filter berdasarkan unit membuat log jauh lebih mudah dibaca. Opsi `-b` membatasi tampilan pada boot saat ini, sedangkan `--since` dan `--until` membantu mempersempit rentang waktu.
+Ketika service gagal berjalan (statusnya failed), langkah pertama bukan mengedit file, melainkan membaca log. systemd menggunakan journalctl untuk mengelola log ini.
 
-Jangan menyalin seluruh log ke forum publik tanpa memeriksa data sensitif. Log dapat memuat alamat IP, nama pengguna, token, atau isi permintaan. Untuk berbagi, ambil bagian yang relevan dan hapus informasi pribadi.
+· Melihat log khusus satu service:
+  ```bash
+  sudo journalctl -u nama-aplikasi.service
+  ```
+· Melihat log 50 baris terakhir (tanpa membuka editor teks):
+  ```bash
+  sudo journalctl -u nama-aplikasi.service -n 50 --no-pager
+  ```
+· Memantau log secara langsung (real-time):
+  Ini sangat berguna saat Anda sedang melakukan debugging.
+  ```bash
+  sudo journalctl -u nama-aplikasi.service -f
+  ```
 
-## Kesalahan yang sering terjadi
+Peringatan Keamanan: Saat meminta bantuan di forum, jangan pernah menyalin seluruh log secara mentah-mentah. Log sering kali memuat alamat IP, nama user, atau bahkan token API rahasia. Bersihkan data sensitif sebelum membagikannya.
 
-Pertama, menjalankan perintah manual sebagai pengguna berbeda dari service yang berjalan sebagai pengguna sistem. Kedua, mengandalkan `PATH` yang tidak tersedia di lingkungan service. Ketiga, lupa `daemon-reload` setelah mengubah unit. Keempat, menambahkan `Restart=always` tanpa memahami mengapa proses berhenti.
+Kesalahan yang Sering Terjadi
 
-Perbaiki penyebab sebelum menambah mekanisme restart. Service yang terus restart dapat menyembunyikan masalah konfigurasi dan membanjiri log. Jika perlu restart otomatis, batasi dengan `RestartSec` dan periksa log secara berkala.
+1. Lupa daemon-reload: Setelah mengubah file .service, perubahan tidak akan terbaca sampai Anda menjalankan systemctl daemon-reload.
+2. PATH tidak ditemukan: Menjalankan ExecStart=python script.py sering gagal. Gunakan path absolut: ExecStart=/usr/bin/python3 /home/user/script.py.
+3. Masalah Izin (Permission): Service berjalan sebagai User yang Anda tentukan. Jika file script atau folder diakses oleh user lain, aplikasi akan gagal (biasanya error Permission Denied).
+4. Skrip bermasalah: Jika ExecStart memanggil file skrip Bash buatan Anda sendiri, pastikan skrip tersebut sudah diuji dan aman. Anda bisa membaca panduan penulisannya di artikel Menyusun Skrip Shell yang Lebih Aman.
 
-## Sumber
+Sumber
 
-- [systemctl manual](https://www.freedesktop.org/software/systemd/man/latest/systemctl.html)
-- [systemd.service manual](https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html)
-- [journalctl manual](https://www.freedesktop.org/software/systemd/man/latest/journalctl.html)
+· systemctl manual
+· systemd.service manual
+· journalctl manual
 
-Artikel starter ini bukan panduan khusus untuk distribusi tertentu. Periksa dokumentasi distribusi Anda sebelum mengubah konfigurasi sistem.
+```
+
+---
