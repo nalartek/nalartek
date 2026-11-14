@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const breadcrumbs = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Kebijakan Privasi' },
+];
+---
+
+<BaseLayout
+  title="Kebijakan Privasi"
+  description="Kebijakan privasi NalarTek: bagaimana kami mengumpulkan, menggunakan, dan melindungi data Anda."
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow="Legal"
+    title="Kebijakan Privasi"
+    description="Terakhir diperbarui: 15 November 2026"
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="section">
+    <div class="container about-copy" style="max-width: 800px;">
+      <p class="lead">
+        Di NalarTek, privasi Anda adalah hal yang serius. Kebijakan ini menjelaskan data apa yang kami kumpulkan, bagaimana data tersebut digunakan, dan hak-hak Anda terkait data tersebut.
+      </p>
+
+      <h2>1. Informasi yang Kami Kumpulkan</h2>
+      <p>
+        NalarTek adalah situs web statis yang di-hosting menggunakan infrastruktur Cloudflare. Kami <strong>tidak</strong> memiliki sistem pendaftaran akun, sehingga kami tidak mengumpulkan nama, alamat email, atau informasi pribadi Anda secara langsung saat Anda membaca artikel kami.
+      </p>
+      <p>
+        Namun, kami dapat mengumpulkan data non-pribadi secara otomatis melalui penyedia layanan pihak ketiga (seperti Cloudflare Web Analytics atau Google Analytics di masa depan), yang mencakup:
+      </p>
+      <ul>
+        <li>Alamat IP (yang dianonimkan)</li>
+        <li>Jenis peramban (browser) dan sistem operasi</li>
+        <li>Halaman yang dikunjungi dan waktu kunjungan</li>
+        <li>Situs web perujuk (referrer)</li>
+      </ul>
+
+      <h2>2. Penggunaan Cookie (Cookies)</h2>
+      <p>
+        Situs ini mungkin menggunakan cookie untuk meningkatkan pengalaman pengguna dan menganalisis lalu lintas web. Cookie adalah file teks kecil yang disimpan di perangkat Anda. Anda dapat mengatur peramban Anda untuk menolak semua cookie atau memberi tahu Anda ketika cookie dikirim.
+      </p>
+      <p>
+        Jika di masa depan NalarTek menampilkan iklan dari Google AdSense, pihak ketiga (Google) akan menggunakan cookie untuk menayangkan iklan berdasarkan kunjungan Anda sebelumnya ke situs ini atau situs lain di internet.
+      </p>
+
+      <h2>3. Tautan ke Situs Pihak Ketiga</h2>
+      <p>
+        Artikel kami sering kali menyertakan tautan ke dokumentasi resmi, repositori kode, atau sumber referensi lainnya. Kebijakan privasi ini hanya berlaku untuk NalarTek. Kami tidak bertanggung jawab atas praktik privasi atau konten dari situs web pihak ketiga.
+      </p>
+
+      <h2>4. Perubahan Kebijakan Privasi</h2>
+      <p>
+        Kami dapat memperbarui kebijakan privasi ini dari waktu ke waktu. Setiap perubahan akan diumumkan di halaman ini dengan pembaruan tanggal "Terakhir diperbarui" di bagian atas.
+      </p>
+
+      <h2>5. Hubungi Kami</h2>
+      <p>
+        Jika Anda memiliki pertanyaan tentang kebijakan privasi ini, Anda dapat menghubungi kami melalui halaman <a href="/contact/">Kontak</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

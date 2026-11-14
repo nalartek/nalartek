@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const breadcrumbs = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Syarat & Ketentuan' },
+];
+---
+
+<BaseLayout
+  title="Syarat & Ketentuan"
+  description="Syarat dan ketentuan penggunaan situs web NalarTek."
+  breadcrumbs={breadcrumbs}
+>
+  <PageHero
+    eyebrow="Legal"
+    title="Syarat & Ketentuan"
+    description="Terakhir diperbarui: 15 November 2026"
+    breadcrumbs={breadcrumbs}
+  />
+
+  <section class="section">
+    <div class="container about-copy" style="max-width: 800px;">
+      <p class="lead">
+        Dengan mengakses dan menggunakan situs NalarTek, Anda dianggap telah membaca, memahami, dan menyetujui syarat dan ketentuan berikut.
+      </p>
+
+      <h2>1. Konten Bersifat Edukatif</h2>
+      <p>
+        Seluruh artikel, panduan, dan opini yang dipublikasikan di NalarTek bertujuan untuk tujuan informasi dan edukasi. Kami berusaha menyajikan informasi yang akurat dan relevan, namun kami tidak memberikan jaminan mutlak bahwa semua informasi bebas dari kesalahan.
+      </p>
+      <p>
+        <strong>Tindakan yang Anda lakukan berdasarkan informasi dari situs ini adalah tanggung jawab Anda sendiri.</strong> Kami tidak bertanggung jawab atas kerusakan perangkat, kehilangan data, atau kerugian lain yang timbul akibat mengikuti panduan teknis (seperti perintah di terminal atau konfigurasi sistem) di situs ini.
+      </p>
+
+      <h2>2. Hak Kekayaan Intelektual</h2>
+      <p>
+        Kecuali dinyatakan lain, semua konten asli di NalarTek (teks, desain, logo) dilindungi oleh hak cipta. Anda diperbolehkan untuk membagikan tautan ke artikel kami. Namun, Anda dilarang menyalin dan menerbitkan ulang artikel kami secara utuh di situs web lain tanpa izin tertulis dari NalarTek.
+      </p>
+      <p>
+        Kami menghormati hak cipta pihak lain. Jika Anda merasa ada konten kami yang melanggar hak cipta Anda, silakan hubungi kami melalui halaman Kontak.
+      </p>
+
+      <h2>3. Penggunaan yang Sah</h2>
+      <p>
+        Anda setuju untuk menggunakan situs ini hanya untuk tujuan yang sah. Anda dilarang mencoba meretas, mengganggu, atau membebani infrastruktur situs web secara sengaja.
+      </p>
+
+      <h2>4. Perubahan Syarat & Ketentuan</h2>
+      <p>
+        NalarTek berhak untuk mengubah atau mengganti Syarat & Ketentuan ini kapan saja. Perubahan akan berlaku segera setelah dipublikasikan di halaman ini.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
