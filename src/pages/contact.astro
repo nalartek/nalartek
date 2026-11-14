@@ -18,22 +18,22 @@ const breadcrumbs = [
 >
   <PageHero
     eyebrow="Kontak"
-    title="Sampaikan koreksi atau pertanyaan."
-    description="NalarTek terbuka untuk masukan yang spesifik, terutama koreksi faktual dan klarifikasi teknis. Tidak ada formulir yang mengirim data ke server; situs ini statis."
+    title="Mari terhubung dan berdiskusi."
+    description="NalarTek terbuka untuk masukan, koreksi faktual, klarifikasi teknis, maupun peluang kolaborasi. Kami percaya pada diskusi yang jujur tanpa sensasi."
     breadcrumbs={breadcrumbs}
   />
 
   <section class="section" aria-labelledby="kanal-title">
     <div class="container contact-layout">
       <div class="contact-main">
-        <p class="eyebrow">Kanal</p>
+        <p class="eyebrow">Kanal Utama</p>
         <h2 class="content-title" id="kanal-title">
-          Kontak editorial<span>.</span>
+          Hubungi Redaksi<span>.</span>
         </h2>
 
         {hasEmail ? (
           <div class="contact-channel">
-            <span class="contact-channel__label">Email</span>
+            <span class="contact-channel__label">Email Resmi</span>
             <a class="contact-email" href={`mailto:${email}`}>{email}</a>
             <p>
               Sertakan URL artikel, kutipan bagian yang dipermasalahkan, dan
@@ -43,20 +43,35 @@ const breadcrumbs = [
           </div>
         ) : (
           <div class="contact-channel contact-channel--empty">
-            <span class="contact-channel__label">Email</span>
+            <span class="contact-channel__label">Email Resmi (Segera Hadir)</span>
             <p>
-              Alamat email publik belum dikonfigurasi untuk situs ini. NalarTek
-              tidak menampilkan formulir palsu atau alamat yang tidak aktif.
+              Saat ini, alamat email publik NalarTek belum dikonfigurasi. Kami
+              memilih untuk tidak menampilkan formulir palsu atau alamat email
+              yang tidak aktif. 
             </p>
             <p>
-              Saat kanal tersedia, halaman ini akan diperbarui. Untuk memahami
-              standar publikasi, lihat kebijakan editorial.
+              Sebagai gantinya, Anda dapat menghubungi pendiri dan tim redaksi melalui
+              kanal alternatif di bawah ini. Halaman ini akan segera diperbarui
+              setelah email resmi tersedia.
             </p>
-            <a class="button button-secondary" href="/editorial-policy/">
-              Baca kebijakan editorial
-            </a>
           </div>
         )}
+
+        <div style="margin-top: 3rem;">
+          <p class="eyebrow">Kanal Alternatif</p>
+          <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+            <!-- GANTI URL DI BAWAH INI DENGAN AKUN ANDA -->
+            <a class="button button-secondary" href="https://github.com/nalartek" target="_blank" rel="noopener noreferrer">
+              GitHub Repositori
+            </a>
+            <a class="button button-secondary" href="https://x.com/nalartek" target="_blank" rel="noopener noreferrer">
+              X (Twitter)
+            </a>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 1rem;">
+            *Jika tautan di atas belum sesuai dengan akun Anda, Anda dapat mengubahnya langsung di file <code>contact.astro</code>.
+          </p>
+        </div>
       </div>
 
       <aside class="contact-aside" aria-labelledby="bantuan-title">
@@ -69,7 +84,7 @@ const breadcrumbs = [
         </ul>
 
         <div class="contact-aside__note">
-          <strong>Koreksi faktual</strong>
+          <strong>Koreksi Faktual</strong>
           <p>
             Jika sebuah klaim tidak akurat, sertakan sumber primer atau
             dokumentasi resmi. Koreksi yang terverifikasi akan ditangani sesuai
