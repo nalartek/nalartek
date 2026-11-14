@@ -1,0 +1,53 @@
+---
+const navLinks = [
+  { href: '#about', label: 'About' },
+  { href: '#topics', label: 'Topics' },
+  { href: '#latest', label: 'Articles' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="NalarTek home">
+      <img
+        class="brand-logo"
+        src="/images/nalartek-logo-128.png"
+        srcset="/images/nalartek-logo-128.png 1x, /images/nalartek-logo-256.png 2x"
+        width="128"
+        height="128"
+        alt=""
+        aria-hidden="true"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <span class="brand-wordmark">NALAR<span>TEK</span></span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      {navLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+
+    <a class="header-cta" href="#topics">
+      Explore <span aria-hidden="true">↗</span>
+    </a>
+
+    <details class="mobile-menu">
+      <summary aria-label="Open navigation menu">
+        <span class="menu-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+      </summary>
+      <nav aria-label="Mobile navigation">
+        {navLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script is:inline>
+  const mobileMenu = document.querySelector('.mobile-menu');
+  mobileMenu?.addEventListener('click', (event) => {
+    if (event.target.closest('a')) mobileMenu.removeAttribute('open');
+  });
+</script>

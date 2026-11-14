@@ -1,0 +1,55 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer" id="footer">
+  <div class="container">
+    <figure class="brand-banner">
+      <img
+        src="/images/nalartek-banner-lockup-1440.png"
+        srcset="/images/nalartek-banner-lockup-720.png 720w, /images/nalartek-banner-lockup-1440.png 1440w"
+        sizes="(max-width: 960px) calc(100vw - 40px), 920px"
+        width="1440"
+        height="600"
+        alt="NalarTek logo with the tagline Understand Technology. Build What Matters."
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  </div>
+
+  <div class="container footer-main">
+    <div class="footer-brand">
+      <a class="brand" href="/" aria-label="NalarTek home">
+        <img
+          class="brand-logo"
+          src="/images/nalartek-logo-128.png"
+          srcset="/images/nalartek-logo-128.png 1x, /images/nalartek-logo-256.png 2x"
+          width="128"
+          height="128"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="brand-wordmark">NALAR<span>TEK</span></span>
+      </a>
+      <p class="footer-tagline">
+        Independent technology media exploring Android, engineering, software,
+        AI, and practical technology.
+      </p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="#about">About</a>
+      <a href="#topics">Topics</a>
+      <a href="#latest">Articles</a>
+      <a href="#main">Back to top</a>
+    </nav>
+  </div>
+
+  <div class="container footer-bottom">
+    <span>© {year} NalarTek. All rights reserved.</span>
+    <span>Independent technology media</span>
+  </div>
+</footer>
