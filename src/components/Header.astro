@@ -59,7 +59,13 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
     </nav>
 <div class="site-header__end">
   <a class="btn btn--accent btn--sm site-header__cta" href="/articles/">Baca artikel</a>
-  <button
+    class="menu-toggle"
+  type="button"
+  aria-expanded="false"
+  aria-controls="mobile-menu"
+  aria-label="Buka menu"
+  data-menu-toggle
+></button><button
     class="menu-toggle"
     type="button"
     aria-expanded="false"
@@ -227,33 +233,50 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
   .site-header__end > .site-header__cta {
     display: none;
   }
+.menu-toggle {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  transition: border-color var(--dur-2) var(--ease-out);
+  background: transparent;
+  cursor: pointer;
+}
 
-  .menu-toggle {
-    position: relative;
-    width: 2.75rem;
-    height: 2.75rem;
-    color: var(--text);
-    border: 1px solid var(--line-strong);
-    transition: border-color var(--dur-2) var(--ease-out);
-  }
-  .menu-toggle[aria-expanded="true"] {
-    border-color: var(--accent);
-  }
-  .menu-toggle__bar {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 1.125rem;
-    height: 2px;
-    margin: -1px 0 0 -0.5625rem;
-    background: currentColor;
-    transition: transform var(--dur-3) var(--ease-out);
-  }
-  .menu-toggle__bar:nth-child(1) { transform: translateY(-4px); }
-  .menu-toggle__bar:nth-child(2) { transform: translateY(4px); }
-  .menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(1) { transform: rotate(45deg); }
-  .menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(2) { transform: rotate(-45deg); }
+.menu-toggle[aria-expanded="true"] {
+  border-color: var(--accent);
+}
 
+/* Ikon Garis Tiga (Hamburger) */
+.menu-toggle::before,
+.menu-toggle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.125rem;
+  height: 2px;
+  background-color: var(--text);
+  transition: transform var(--dur-3) var(--ease-out);
+  will-change: transform;
+}
+
+/* Posisi awal garis */
+.menu-toggle::before {
+  transform: translate(-50%, calc(-50% - 4px));
+}
+.menu-toggle::after {
+  transform: translate(-50%, calc(-50% + 4px));
+}
+
+/* Animasi berubah jadi X saat menu diklik */
+.menu-toggle[aria-expanded="true"]::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"]::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
   /* Menu layar penuh (mobile) */
   .mobile-menu {
     position: fixed;
