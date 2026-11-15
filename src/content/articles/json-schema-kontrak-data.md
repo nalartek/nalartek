@@ -11,7 +11,6 @@ tags:
   - "JSON"
   - "API"
   - "Validasi"
-starter: true
 ---
 
 Saat dua sistem bertukar data, kesalahan yang paling sering muncul bukan karena algoritma yang rumit, melainkan karena perbedaan asumsi tentang bentuk data. *Field* (kolom) yang dianggap wajib ternyata hilang, tipe angka berubah menjadi teks (string), atau nilai *enum* yang baru tidak dikenali. JSON Schema hadir untuk membuat asumsi itu eksplisit dan dapat diuji secara otomatis.

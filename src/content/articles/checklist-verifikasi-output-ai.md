@@ -11,7 +11,6 @@ tags:
   - "Verifikasi"
   - "Riset"
 featured: true
-starter: true
 ---
 
 Model bahasa (seperti ChatGPT, Claude, atau Gemini) sangat berguna untuk menyusun kerangka, meringkas bahan yang sudah kita berikan, dan mengubah gaya tulisan. Masalah muncul ketika keluaran (output) model diperlakukan sebagai sumber fakta. Teks yang lancar dan terdengar meyakinkan tidak otomatis benar. Bahkan, kutipan yang terlihat sangat rapi dengan nama penulis dan tahun bisa saja tidak pernah ada di dunia nyata.

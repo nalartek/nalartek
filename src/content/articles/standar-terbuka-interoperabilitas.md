@@ -10,7 +10,6 @@ tags:
   - "Standar"
   - "Web"
   - "Interoperabilitas"
-starter: true
 ---
 
 Standar terbuka jarang menjadi berita utama. Ia bekerja di latar belakang ketika halaman web dapat dibuka di berbagai peramban (browser), surel (email) dapat dikirim antarpenyedia (dari Gmail ke Yahoo), dan perangkat dari produsen berbeda dapat berkomunikasi. Ketika standar bekerja dengan baik, kita cenderung tidak menyadarinya sama sekali.

@@ -10,7 +10,6 @@ tags:
   - "Android"
   - "Keamanan"
   - "Pembaruan"
-starter: true
 ---
 
 Tidak semua pembaruan Android membawa perubahan yang terlihat. Sebagian memperbaiki *bug*, sebagian menutup celah keamanan, dan sebagian lagi mengubah perilaku sistem yang mungkin tidak disadari pengguna. Memahami jenis pembaruan membantu mengambil keputusan tanpa panik dan tanpa menunda terlalu lama.

@@ -11,7 +11,6 @@ tags:
   - "Privasi"
   - "Izin aplikasi"
 featured: true
-starter: true
 ---
 
 Izin aplikasi sering diperlakukan sebagai daftar centang: semakin sedikit semakin baik, atau semakin banyak semakin lengkap. Kenyataannya, izin adalah mekanisme kontrol akses. Yang penting bukan jumlah izin yang ditolak, melainkan apakah akses yang diberikan sesuai dengan fungsi yang benar-benar digunakan.

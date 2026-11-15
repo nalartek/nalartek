@@ -12,7 +12,6 @@ tags:
   - "systemd"
   - "Server"
 featured: true
-starter: true
 ---
 
 Bagi banyak orang yang baru masuk ke dunia Linux, `systemd` sering terasa seperti kotak hitam yang rumit. Ia menyentuh hampir semua bagian sistem: proses *boot*, manajemen *service* (layanan), log, penjadwalan (timer), dan manajemen perangkat keras.

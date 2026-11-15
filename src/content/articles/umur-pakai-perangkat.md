@@ -10,7 +10,6 @@ tags:
   - "Perangkat"
   - "Keberlanjutan"
   - "Reparasi"
-starter: true
 ---
 
 Daftar spesifikasi mudah dibandingkan: jumlah inti prosesor, kapasitas baterai, ukuran layar, dan jumlah kamera. Namun spesifikasi tidak menjawab pertanyaan yang menentukan biaya kepemilikan jangka panjang: berapa lama perangkat menerima pembaruan, apakah baterai dapat diganti, dan apakah layanan reparasi tersedia.

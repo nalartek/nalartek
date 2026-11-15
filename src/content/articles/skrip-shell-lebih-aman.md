@@ -11,7 +11,6 @@ tags:
   - "Bash"
   - "Shell"
   - "Otomasi"
-starter: true
 ---
 
 Skrip shell sering dimulai sebagai satu baris perintah yang disalin dari internet ke dalam file. Ketika skrip mulai dipakai berulang kali, masalah kecil mulai muncul: nama file yang mengandung spasi tiba-tiba tidak terbaca, perintah gagal tetapi skrip tetap berlanjut seolah tidak terjadi apa-apa, atau variabel yang kosong malah menghapus direktori yang salah.
