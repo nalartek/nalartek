@@ -35,3 +35,4 @@ pnpm-debug.log*
 .wrangler/
 .vercel/
 .netlify/
+.bak/
