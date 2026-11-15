@@ -16,7 +16,11 @@ tags:
 Skrip shell sering dimulai sebagai satu baris perintah yang disalin dari internet ke dalam file. Ketika skrip mulai dipakai berulang kali, masalah kecil mulai muncul: nama file yang mengandung spasi tiba-tiba tidak terbaca, perintah gagal tetapi skrip tetap berlanjut seolah tidak terjadi apa-apa, atau variabel yang kosong malah menghapus direktori yang salah.
 
 Menulis skrip yang aman bukan tentang menambahkan fitur yang rumit, melainkan tentang menetapkan **aturan dasar (defensive programming)** sejak awal.
-
+> **Poin Penting:**
+> - Selalu gunakan *strict mode* (`set -euo pipefail`) di awal skrip Bash.
+> - Selalu kutip variabel (contoh: `"$file"`) untuk mencegah error spasi atau karakter aneh.
+> - Periksa ketersediaan dependensi perintah sebelum skrip dieksekusi.
+> - Gunakan alat statis seperti ShellCheck untuk mendeteksi pola berbahaya.
 ## Tentukan kontrak skrip
 
 Sebelum menulis perintah, tentukan apa yang diterima skrip dan apa yang dihasilkannya. Apakah skrip membutuhkan satu argumen? Apakah ia mengubah file di direktori saat ini? Apakah aman dijalankan dua kali? Kontrak yang jelas membantu menentukan pemeriksaan input dan pesan kesalahan.

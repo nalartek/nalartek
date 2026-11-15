@@ -15,7 +15,11 @@ tags:
 Daftar spesifikasi mudah dibandingkan: jumlah inti prosesor, kapasitas baterai, ukuran layar, dan jumlah kamera. Namun spesifikasi tidak menjawab pertanyaan yang menentukan biaya kepemilikan jangka panjang: berapa lama perangkat menerima pembaruan, apakah baterai dapat diganti, dan apakah layanan reparasi tersedia.
 
 Banyak konsumen terjebak membeli perangkat dengan RAM 12GB dan kamera 108MP, tetapi dua tahun kemudian perangkat tersebut tidak lagi menerima *patch* keamanan dan baterainya sudah terkuras cepat. Pada titik itu, spesifikasi tinggi di atas kertas tidak lagi relevan dengan kenyamanan penggunaan sehari-hari.
-
+> **Poin Penting:**
+> - Spesifikasi tinggi di atas kertas tidak menjamin perangkat berumur panjang.
+> - Dukungan pembaruan sistem (OS & keamanan) adalah faktor penentu utama.
+> - Baterai yang mudah diganti dan ketersediaan suku cadang memperpanjang usia pakai.
+> - Kebiasaan merawat baterai (20%-80%) sangat memengaruhi kesehatan perangkat.
 ## Spesifikasi bukan umur pakai
 
 Perangkat dengan spesifikasi tinggi tetap bisa menjadi tidak layak jika pembaruan berhenti terlalu cepat atau kerusakan kecil tidak dapat diperbaiki. Sebaliknya, perangkat dengan spesifikasi sederhana dapat bertahan lebih lama jika perangkat lunaknya dirawat dan komponennya tersedia.

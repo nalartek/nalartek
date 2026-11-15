@@ -17,7 +17,11 @@ featured: true
 Bagi banyak orang yang baru masuk ke dunia Linux, `systemd` sering terasa seperti kotak hitam yang rumit. Ia menyentuh hampir semua bagian sistem: proses *boot*, manajemen *service* (layanan), log, penjadwalan (timer), dan manajemen perangkat keras.
 
 Namun, untuk kebutuhan sehari-hari sebagai pengguna maupun *developer*, kita hanya perlu memahami beberapa konsep dasar. Artikel ini membahas cara kerja unit, file *service*, dan cara membaca log tanpa harus menghafal seluruh dokumentasi.
-
+> **Poin Penting:**
+> - `systemd` mengelola sistem Linux melalui *Unit* (`.service`, `.timer`, `.mount`).
+> - File `.service` mendefinisikan cara proses berjalan, termasuk `ExecStart` dan `User`.
+> - Selalu jalankan `systemctl daemon-reload` setelah mengubah file konfigurasi unit.
+> - Gunakan `journalctl -u nama-service -f` untuk memantau log secara langsung saat *debugging*.
 ## Apa yang dikelola systemd?
 
 `systemd` mengelola banyak hal melalui apa yang disebut **Unit**. Unit adalah file konfigurasi terstruktur yang mendeskripsikan sesuatu yang harus dijalankan atau dikelola oleh sistem. Nama unit biasanya berakhiran sesuai dengan tipenya:

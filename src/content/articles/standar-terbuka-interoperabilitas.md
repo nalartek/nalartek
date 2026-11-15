@@ -15,7 +15,11 @@ tags:
 Standar terbuka jarang menjadi berita utama. Ia bekerja di latar belakang ketika halaman web dapat dibuka di berbagai peramban (browser), surel (email) dapat dikirim antarpenyedia (dari Gmail ke Yahoo), dan perangkat dari produsen berbeda dapat berkomunikasi. Ketika standar bekerja dengan baik, kita cenderung tidak menyadarinya sama sekali.
 
 Sebaliknya, kita baru menyadari pentingnya standar ketika terjadi masalah: saat file dokumen tidak bisa dibuka di komputer lain, atau saat *charger* ponsel tidak cocok dengan colokan yang ada.
-
+> **Poin Penting:**
+> - Standar terbuka memungkinkan sistem yang berbeda untuk saling terhubung (interoperabilitas).
+> - Format tertutup seringkali menjebak pengguna dalam *Vendor Lock-in* yang mahal.
+> - Web modern (HTML, HTTP) dibangun di atas fondasi standar terbuka.
+> - Sebagai pengguna, selalu utamakan format yang memiliki jalur ekspor data yang jelas.
 ## Apa itu standar terbuka?
 
 Standar terbuka adalah spesifikasi teknis yang tersedia untuk diimplementasikan oleh siapa saja, biasanya melalui proses yang transparan (seperti W3C atau IETF). Tidak semua standar resmi bersifat terbuka, dan tidak semua format yang populer bersifat standar. 

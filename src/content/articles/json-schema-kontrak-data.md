@@ -16,7 +16,11 @@ tags:
 Saat dua sistem bertukar data, kesalahan yang paling sering muncul bukan karena algoritma yang rumit, melainkan karena perbedaan asumsi tentang bentuk data. *Field* (kolom) yang dianggap wajib ternyata hilang, tipe angka berubah menjadi teks (string), atau nilai *enum* yang baru tidak dikenali. JSON Schema hadir untuk membuat asumsi itu eksplisit dan dapat diuji secara otomatis.
 
 Tanpa kontrak data, validasi sering tersebar di banyak tempat (dan sering terlewat). Dengan JSON Schema, tim memiliki satu rujukan tunggal tentang bagaimana data harus berbentuk.
-
+> **Poin Penting:**
+> - JSON Schema mencegah *bug* integrasi dengan mendefinisikan bentuk data secara eksplisit.
+> - Gunakan `required` untuk validasi *field* wajib dan `additionalProperties` untuk menolak *field* asing.
+> - Pahami bedanya validasi bentuk (Schema) dan validasi logika bisnis (kode aplikasi).
+> - Di era AI, JSON Schema digunakan untuk memaksa model bahasa memberikan *output* yang terstruktur.
 ## Mengapa kontrak data penting
 
 Kontrak data adalah kesepakatan tentang apa yang dikirim, apa yang diterima, dan apa yang terjadi ketika data tidak sesuai. Bayangkan jika sebuah aplikasi *e-commerce* mengirim data pesanan, tetapi sistem gudang mengharapkan format tanggal yang berbeda. Tanpa validasi, aplikasi akan *crash* atau, lebih buruk lagi, menyimpan data yang salah.
