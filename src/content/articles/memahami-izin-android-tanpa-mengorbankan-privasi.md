@@ -16,7 +16,11 @@ featured: true
 Izin aplikasi sering diperlakukan sebagai daftar centang: semakin sedikit semakin baik, atau semakin banyak semakin lengkap. Kenyataannya, izin adalah mekanisme kontrol akses. Yang penting bukan jumlah izin yang ditolak, melainkan apakah akses yang diberikan sesuai dengan fungsi yang benar-benar digunakan.
 
 Artikel ini membahas cara membaca izin Android secara praktis. Fokusnya bukan menakuti pengguna, tetapi membantu mengambil keputusan yang bisa dipertanggungjawabkan saat memasang atau meninjau aplikasi.
-
+> **Poin Penting:**
+> - Izin aplikasi adalah kontrol akses, bukan sekadar daftar centang untuk ditolak.
+> - Pahami perbedaan antara akses "Saat digunakan" dan "Sepanjang waktu".
+> - Selalu tinjau izin secara berkala dan cabut akses yang tidak lagi relevan.
+> - Izin hanyalah satu lapisan; kebiasaan mengunduh dari sumber resmi tetap yang utama.
 ## Model izin yang perlu dipahami
 
 Android membagi akses ke data sensitif ke dalam beberapa kelompok. Ada izin yang diberikan saat aplikasi memintanya (runtime permissions), ada izin yang harus dikonfirmasi setiap kali digunakan, dan ada izin khusus yang hanya bisa diberikan melalui pengaturan sistem (special permissions).

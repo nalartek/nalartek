@@ -18,7 +18,11 @@ Model bahasa (seperti ChatGPT, Claude, atau Gemini) sangat berguna untuk menyusu
 Fenomena ini sering disebut sebagai **Halusinasi AI (AI Hallucination)**. AI tidak "mencari" jawaban di internet, melainkan memprediksi urutan kata yang paling mungkin muncul berdasarkan pola data yang pernah ia baca. Karena itu, AI bisa dengan sangat percaya diri menciptakan fakta palsu.
 
 Artikel ini menyajikan checklist sederhana untuk memakai output AI secara kritis. Checklist ini tidak membutuhkan alat khusus; yang dibutuhkan adalah kebiasaan memeriksa klaim sebelum dipublikasikan atau dipakai dalam keputusan penting.
-
+> **Poin Penting:**
+> - AI memprediksi teks, ia tidak memiliki kewajiban untuk memverifikasi fakta.
+> - Selalu bedakan antara ide, klaim faktual, dan sumber referensi.
+> - Kutipan akademis atau tautan yang dihasilkan AI harus dibuka dan diperiksa secara manual.
+> - Jangan pernah menjalankan skrip atau perintah terminal dari AI tanpa memahaminya baris per baris.
 ## AI menghasilkan teks, bukan kebenaran
 
 Pisahkan tiga hal: ide, klaim faktual, dan sumber. Ide dapat dievaluasi dengan pertimbangan sendiri. Klaim faktual harus diperiksa. Sumber harus dibuka dan dibaca, bukan hanya dilihat judulnya.

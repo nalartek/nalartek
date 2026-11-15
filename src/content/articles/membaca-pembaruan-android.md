@@ -15,7 +15,10 @@ tags:
 Tidak semua pembaruan Android membawa perubahan yang terlihat. Sebagian memperbaiki *bug*, sebagian menutup celah keamanan, dan sebagian lagi mengubah perilaku sistem yang mungkin tidak disadari pengguna. Memahami jenis pembaruan membantu mengambil keputusan tanpa panik dan tanpa menunda terlalu lama.
 
 Bagi banyak orang, notifikasi "Pembaruan Sistem Tersedia" sering kali diabaikan karena takut perangkat menjadi lambat, atau justru langsung ditekan karena merasa harus selalu *up-to-date*. Keduanya bisa kurang tepat jika tidak didasari pemahaman tentang apa yang sebenarnya diunduh.
-
+> **Poin Penting:**
+> - Pembaruan Android terbagi menjadi tiga lapisan: OS, Patch Keamanan, dan Modul Sistem (Mainline).
+> - Patch keamanan bulanan seringkali lebih krusial untuk privasi dibandingkan pembaruan versi OS besar.
+> - Periksa tanggal "Tingkat Patch Keamanan" di pengaturan HP Anda secara berkala.> - Jika perangkat tidak menerima patch keamanan lebih dari 6-12 bulan, hindari menggunakannya untuk data sensitif.
 ## Tiga lapisan pembaruan yang perlu dibedakan
 
 Sistem Android yang kita gunakan hari ini sebenarnya terdiri dari beberapa lapisan. Memisahkan ketiganya adalah kunci untuk membaca pembaruan dengan kritis.
