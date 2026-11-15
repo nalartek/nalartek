@@ -1,10 +1,4 @@
 ---
-/* ==========================================================================
-   NalarTek — Header v2
-   Sticky. Transparan di atas halaman, berubah jadi kaca (blur) saat di-scroll.
-   Desktop: nav dengan garis penanda yang bergeser. Mobile: menu layar penuh.
-   Progress baca hanya muncul di halaman artikel.
-   ========================================================================== */
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 
 const links = [
@@ -57,23 +51,18 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
       </ul>
       <span class="nav__indicator" data-nav-indicator aria-hidden="true"></span>
     </nav>
-<div class="site-header__end">
-  <a class="btn btn--accent btn--sm site-header__cta" href="/articles/">Baca artikel</a>
-    class="menu-toggle"
-  type="button"
-  aria-expanded="false"
-  aria-controls="mobile-menu"
-  aria-label="Buka menu"
-  data-menu-toggle
-></button><button
-    class="menu-toggle"
-    type="button"
-    aria-expanded="false"
-    aria-controls="mobile-menu"
-    aria-label="Buka menu"
-    data-menu-toggle
-  ></button>
-</div>
+
+    <div class="site-header__end">
+      <a class="btn btn--accent btn--sm site-header__cta" href="/articles/">Baca artikel</a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Buka menu"
+        data-menu-toggle
+      ></button>
+    </div>
   </div>
 </header>
 
@@ -100,7 +89,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
 </div>
 
 <style>
-  /* Progress baca */
   .progress {
     position: fixed;
     inset: 0 0 auto 0;
@@ -116,7 +104,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
     transform-origin: 0 50%;
   }
 
-  /* Header + kaca saat scroll */
   .site-header {
     position: sticky;
     top: 0;
@@ -153,7 +140,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
     height: var(--header-h);
   }
 
-  /* Brand */
   .brand {
     display: inline-flex;
     align-items: center;
@@ -178,7 +164,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
     color: var(--accent);
   }
 
-  /* Nav desktop */
   .nav {
     --pad: 1rem;
     position: relative;
@@ -223,7 +208,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
       opacity var(--dur-2) var(--ease-out);
   }
 
-  /* Aksi kanan */
   .site-header__end {
     display: flex;
     align-items: center;
@@ -233,51 +217,45 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
   .site-header__end > .site-header__cta {
     display: none;
   }
-.menu-toggle {
-  position: relative;
-  width: 2.75rem;
-  height: 2.75rem;
-  color: var(--text);
-  border: 1px solid var(--line-strong);
-  transition: border-color var(--dur-2) var(--ease-out);
-  background: transparent;
-  cursor: pointer;
-}
 
-.menu-toggle[aria-expanded="true"] {
-  border-color: var(--accent);
-}
+  .menu-toggle {
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--text);
+    border: 1px solid var(--line-strong);
+    transition: border-color var(--dur-2) var(--ease-out);
+    background: transparent;
+    cursor: pointer;
+  }
+  .menu-toggle[aria-expanded="true"] {
+    border-color: var(--accent);
+  }
+  .menu-toggle::before,
+  .menu-toggle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1.125rem;
+    height: 2px;
+    background-color: var(--text);
+    transition: transform var(--dur-3) var(--ease-out);
+    will-change: transform;
+  }
+  .menu-toggle::before {
+    transform: translate(-50%, calc(-50% - 4px));
+  }
+  .menu-toggle::after {
+    transform: translate(-50%, calc(-50% + 4px));
+  }
+  .menu-toggle[aria-expanded="true"]::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .menu-toggle[aria-expanded="true"]::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
 
-/* Ikon Garis Tiga (Hamburger) */
-.menu-toggle::before,
-.menu-toggle::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1.125rem;
-  height: 2px;
-  background-color: var(--text);
-  transition: transform var(--dur-3) var(--ease-out);
-  will-change: transform;
-}
-
-/* Posisi awal garis */
-.menu-toggle::before {
-  transform: translate(-50%, calc(-50% - 4px));
-}
-.menu-toggle::after {
-  transform: translate(-50%, calc(-50% + 4px));
-}
-
-/* Animasi berubah jadi X saat menu diklik */
-.menu-toggle[aria-expanded="true"]::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-.menu-toggle[aria-expanded="true"]::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-  /* Menu layar penuh (mobile) */
   .mobile-menu {
     position: fixed;
     inset: 0;
@@ -372,7 +350,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
   const header = document.querySelector('[data-header]');
 
   if (header) {
-    /* 1. Kaca saat scroll + progress baca */
     const bar = document.querySelector('[data-progress]');
     let ticking = false;
 
@@ -395,7 +372,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
     window.addEventListener('resize', onScroll, { passive: true });
     paint();
 
-    /* 2. Garis penanda navigasi yang berpindah */
     const nav = header.querySelector('[data-nav]');
     const indicator = nav ? nav.querySelector('[data-nav-indicator]') : null;
 
@@ -404,7 +380,7 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
       const current = nav.querySelector('[aria-current="page"]');
       let ready = false;
 
-      const moveTo = (el) => {
+      const moveTo = (el: any) => {
         if (el === null) {
           indicator.style.opacity = '0';
           return;
@@ -425,7 +401,7 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
         link.addEventListener('focus', () => moveTo(link));
       });
       nav.addEventListener('pointerleave', () => moveTo(current));
-      nav.addEventListener('focusout', (e) => {
+      nav.addEventListener('focusout', (e: any) => {
         if (nav.contains(e.relatedTarget) === false) moveTo(current);
       });
       window.addEventListener('resize', () => moveTo(current));
@@ -435,7 +411,6 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
       moveTo(current);
     }
 
-    /* 3. Menu layar penuh (mobile) */
     const menu = document.querySelector('[data-menu]');
     const toggle = header.querySelector('[data-menu-toggle]');
 
@@ -443,13 +418,13 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
       const desktop = window.matchMedia('(min-width: 48em)');
       const pageParts = document.querySelectorAll('main, [data-site-footer]');
 
-      const setOpen = (open) => {
+      const setOpen = (open: boolean) => {
         toggle.setAttribute('aria-expanded', String(open));
         toggle.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
         menu.setAttribute('data-open', String(open));
-        menu.inert = open === false;
+        (menu as HTMLElement).inert = open === false;
         pageParts.forEach((el) => {
-          el.inert = open;
+          (el as HTMLElement).inert = open;
         });
         root.classList.toggle('is-locked', open);
       };
@@ -457,13 +432,13 @@ const showProgress = /^\/articles\/[^/]+/.test(path);
       toggle.addEventListener('click', () => {
         setOpen(toggle.getAttribute('aria-expanded') === 'false');
       });
-      menu.addEventListener('click', (e) => {
+      menu.addEventListener('click', (e: any) => {
         if (e.target.closest('a')) setOpen(false);
       });
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
           setOpen(false);
-          toggle.focus();
+          (toggle as HTMLElement).focus();
         }
       });
       desktop.addEventListener('change', (e) => {
