@@ -41,6 +41,8 @@ export const GET: APIRoute = async ({ site }) => {
       '/about/',
       '/contact/',
       '/editorial-policy/',
+'/privacy-policy/',
+'/terms/',
     ];
 
     for (const path of staticPaths) {
