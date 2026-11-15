@@ -7,29 +7,188 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   description="Halaman yang Anda cari tidak ditemukan. Jelajahi arsip artikel dan kategori NalarTek."
   noindex
 >
-  <section class="error-page" aria-labelledby="error-title">
-    <div class="container error-grid">
-      <div class="error-copy">
-        <p class="eyebrow">Error / 404</p>
-        <h1 id="error-title">Halaman ini tidak ditemukan.</h1>
-        <p>
-          Tautan mungkin sudah berubah, atau alamat yang dibuka tidak lengkap.
-          Arsip artikel dan kategori tetap dapat dijelajahi.
-        </p>
-        <div class="error-actions">
-          <a class="button button-primary" href="/articles/">
-            Buka arsip artikel <span aria-hidden="true">↗</span>
-          </a>
-          <a class="button button-secondary" href="/">Kembali ke beranda</a>
-        </div>
-      </div>
+  <section class="lost" aria-labelledby="error-title">
+    <span class="lost__scan" aria-hidden="true"></span>
+    <span class="lost__cross lost__cross--one" aria-hidden="true">+</span>
+    <span class="lost__cross lost__cross--two" aria-hidden="true">+</span>
 
-      <div class="error-visual" aria-hidden="true">
-        <span class="error-number">404</span>
-        <span class="error-label">NALARTEK / LOST SIGNAL</span>
-        <span class="error-cross error-cross--one">+</span>
-        <span class="error-cross error-cross--two">+</span>
+    <div class="container lost__inner">
+      <p class="lost__label rise" style="--d:0ms" aria-hidden="true">NALARTEK / LOST SIGNAL</p>
+      <span class="lost__num rise" style="--d:100ms" aria-hidden="true">404</span>
+
+      <div class="lost__copy">
+        <div class="rise" style="--d:240ms">
+          <p class="tag">Error / 404</p>
+          <h1 id="error-title">Halaman ini tidak ditemukan<span>.</span></h1>
+        </div>
+
+        <div class="rise" style="--d:320ms">
+          <p class="lost__text">
+            Tautan mungkin sudah berubah, atau alamat yang dibuka tidak lengkap.
+            Arsip artikel dan kategori tetap dapat dijelajahi.
+          </p>
+          <div class="actions">
+            <a class="btn btn--primary" href="/">
+              Kembali ke Beranda <span aria-hidden="true">↗</span>
+            </a>
+            <a class="btn btn--ghost" href="/articles/">Buka arsip artikel</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .lost {
+    --sig: #18d6ff;
+    --line: #1c2127;
+    --muted: #aab2bb;
+    --dim: #6b7580;
+    --display: 'Archivo', 'Arial Narrow', Impact, sans-serif;
+    --mono: ui-monospace, 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: calc(100svh - 4.5rem);
+    padding-block: clamp(6rem, 12vw, 8rem) clamp(3rem, 6vw, 5rem);
+    overflow: hidden;
+    background: #000;
+    color: var(--muted);
+    font-family: 'Manrope', system-ui, sans-serif;
+  }
+  .lost__inner { position: relative; z-index: 1; }
+
+  /* ---------- Animasi ---------- */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes signal {
+    0%, 44%, 56%, 100% { opacity: 1; }
+    46% { opacity: 0.3; }
+    50% { opacity: 0.85; }
+    52% { opacity: 0.45; }
+  }
+  @keyframes scan {
+    from { top: 0; }
+    to { top: 100%; }
+  }
+  .rise {
+    animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rise, .lost__num, .lost__scan { animation: none; }
+  }
+
+  /* ---------- Visual ---------- */
+  .lost__scan {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sig), transparent);
+    opacity: 0.45;
+    animation: scan 8s linear infinite;
+  }
+  .lost__cross {
+    position: absolute;
+    font: 300 1.5rem/1 var(--mono);
+    color: var(--sig);
+    opacity: 0.6;
+  }
+  .lost__cross--one { top: 18%; right: 8%; }
+  .lost__cross--two { bottom: 14%; left: 6%; }
+
+  .lost__label {
+    margin: 0 0 1rem;
+    font: 500 0.72rem/1 var(--mono);
+    letter-spacing: 0.22em;
+    color: var(--dim);
+  }
+  .lost__num {
+    display: block;
+    margin-left: -0.04em;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(8rem, 30vw, 34rem);
+    line-height: 0.78;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: clamp(1px, 0.25vw, 3px) var(--sig);
+    user-select: none;
+    animation: signal 6s steps(1, end) infinite;
+  }
+
+  /* ---------- Teks ---------- */
+  .lost__copy {
+    display: grid;
+    gap: 1.75rem;
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+  }
+  @media (min-width: 900px) {
+    .lost__copy {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      gap: 4rem;
+      align-items: end;
+    }
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 0 0 1.25rem;
+    font: 500 0.75rem/1 var(--mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sig);
+  }
+  .tag::before { content: ''; width: 0.5rem; height: 0.5rem; background: var(--sig); }
+
+  .lost h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(2rem, 5vw, 3.75rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: #fff;
+    text-wrap: balance;
+  }
+  .lost h1 span { color: var(--sig); }
+  .lost__text {
+    margin: 0;
+    max-width: 46ch;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  /* ---------- Tombol ---------- */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 1.75rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--sig);
+    font: 700 0.78rem/1 var(--mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .btn--primary { background: var(--sig); color: #000; }
+  .btn--primary:hover { background: transparent; color: var(--sig); }
+  .btn--ghost { background: transparent; color: #fff; border-color: #2a323a; }
+  .btn--ghost:hover { border-color: var(--sig); color: var(--sig); }
+  .btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+</style>
