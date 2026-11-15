@@ -1,76 +1,297 @@
 ---
-import { categories } from '../lib/categories';
-
+/* ==========================================================================
+   NalarTek — Footer v2
+   Tagline + deskripsi di kiri, tiga kolom tautan di kanan (grid asimetris).
+   Satu momen berani: wordmark raksasa yang "fokus" (buram ke tajam) saat muncul.
+   ========================================================================== */
 const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: 'Jelajahi',
+    items: [
+      { href: '/articles/', label: 'Semua artikel' },
+      { href: '/categories/', label: 'Kategori' },
+      { href: '/about/', label: 'Tentang NalarTek' },
+      { href: '/contact/', label: 'Kontak' },
+    ],
+  },
+  {
+    title: 'Kategori',
+    items: [
+      { href: '/categories/android/', label: 'Android' },
+      { href: '/categories/engineering-linux/', label: 'Engineering & Linux' },
+      { href: '/categories/ai-software/', label: 'AI & Software' },
+      { href: '/categories/technology-innovation/', label: 'Technology & Innovation' },
+    ],
+  },
+  {
+    title: 'Editorial',
+    items: [
+      { href: '/editorial-policy/', label: 'Kebijakan editorial' },
+      { href: '/contact/', label: 'Koreksi & masukan' },
+      { href: '/about/', label: 'Prinsip kami' },
+      { href: '/privacy-policy/', label: 'Kebijakan privasi' },
+      { href: '/terms/', label: 'Syarat & ketentuan' },
+    ],
+  },
+];
+
+const letters = 'NALARTEK'.split('');
 ---
 
-<footer class="site-footer">
+<footer class="site-footer" data-site-footer>
   <div class="container">
-    <figure class="brand-banner">
-      <img
-        src="/images/nalartek-banner-lockup-1440.png"
-        srcset="/images/nalartek-banner-lockup-720.png 720w, /images/nalartek-banner-lockup-1440.png 1440w"
-        sizes="(max-width: 960px) calc(100vw - 40px), 920px"
-        width="1440"
-        height="600"
-        alt="Logo NalarTek dengan slogan Understand Technology. Build What Matters."
-        loading="lazy"
-        decoding="async"
-      />
-    </figure>
-  </div>
+    <div class="site-footer__top">
+      <div class="site-footer__intro">
+        <p class="site-footer__tagline">Understand Technology.<br />Build What Matters.</p>
+        <p class="site-footer__about">
+          Media teknologi independen dari Indonesia. Membahas Android, engineering, Linux, AI, software, dan inovasi secara praktis.
+        </p>
+      </div>
 
-  <div class="container footer-main">
-    <div class="footer-brand">
-      <a class="brand" href="/" aria-label="NalarTek — beranda">
-        <img
-          class="brand-logo"
-          src="/images/nalartek-logo-128.png"
-          srcset="/images/nalartek-logo-128.png 1x, /images/nalartek-logo-256.png 2x"
-          width="128"
-          height="128"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-        />
-        <span class="brand-wordmark" aria-hidden="true">NALAR<span>TEK</span></span>
-      </a>
-      <p class="footer-tagline">
-        Media teknologi independen dari Indonesia. Membahas Android,
-        engineering, Linux, AI, software, dan inovasi secara praktis.
-      </p>
-    </div>
-
-    <div class="footer-columns">
-      <nav class="footer-column" aria-label="Navigasi utama footer">
-        <h2 class="footer-heading">Jelajahi</h2>
-        <a href="/articles/">Semua artikel</a>
-        <a href="/categories/">Kategori</a>
-        <a href="/about/">Tentang NalarTek</a>
-        <a href="/contact/">Kontak</a>
-      </nav>
-
-      <nav class="footer-column" aria-label="Kategori footer">
-        <h2 class="footer-heading">Kategori</h2>
-        {categories.map((category) => (
-          <a href={`/categories/${category.slug}/`}>{category.name}</a>
+      <nav class="site-footer__nav" aria-label="Navigasi footer">
+        {columns.map((col) => (
+          <div class="site-footer__col">
+            <h2 class="site-footer__heading">{col.title}</h2>
+            <ul class="site-footer__list">
+              {col.items.map((item) => (
+                <li><a class="link-u" href={item.href}>{item.label}</a></li>
+              ))}
+            </ul>
+          </div>
         ))}
       </nav>
-
-      <nav class="footer-column" aria-label="Informasi editorial footer">
-        <h2 class="footer-heading">Editorial</h2>
-        <a href="/editorial-policy/">Kebijakan editorial</a>
-        <a href="/contact/">Koreksi & masukan</a>
-        <a href="/about/">Prinsip kami</a>
-<a href="/privacy-policy/">Kebijakan privasi</a>
-<a href="/terms/">Syarat & ketentuan</a>
-      </nav>
     </div>
   </div>
 
-  <div class="container footer-bottom">
-    <span>© {year} NalarTek. Hak cipta dilindungi.</span>
-    <a href="#top">Kembali ke atas ↑</a>
+  <div class="wordmark" data-wordmark aria-hidden="true">
+    <div class="container wordmark__box">
+      <div class="wordmark__letters">
+        {letters.map((ch, i) => (
+          <span class="wordmark__letter" style={`--i:${i}`}>{ch}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="site-footer__bottom">
+      <p class="site-footer__legal">© {year} NalarTek. Hak cipta dilindungi.</p>
+      <button class="to-top" type="button" data-to-top>
+        Kembali ke atas
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+          <path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" />
+        </svg>
+      </button>
+    </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+  }
+
+  .site-footer__top {
+    display: grid;
+    gap: var(--space-8);
+    padding-block: var(--space-9) var(--space-8);
+  }
+
+  .site-footer__tagline {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    font-weight: 800;
+    font-stretch: 82%;
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    text-wrap: balance;
+  }
+
+  .site-footer__about {
+    max-width: 34ch;
+    margin: var(--space-5) 0 0;
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .site-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7) var(--grid-gap);
+  }
+  .site-footer__col:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .site-footer__heading {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0;
+    color: var(--text);
+  }
+
+  .site-footer__list {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .site-footer__list a {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
+
+  /* Wordmark raksasa: huruf disebar rata selebar kontainer */
+  .wordmark {
+    overflow-x: clip;
+    padding-block: var(--space-4) var(--space-5);
+  }
+  .wordmark__box {
+    container-type: inline-size;
+  }
+  .wordmark__letters {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-display);
+    font-size: 16vw;
+    font-size: 16cqw;
+    font-weight: 900;
+    font-stretch: 100%;
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .wordmark__letter {
+    display: block;
+    transition:
+      color var(--dur-2) var(--ease-out),
+      transform var(--dur-3) var(--ease-out);
+  }
+
+  :global(html.js) .wordmark:not(.is-in) .wordmark__letter {
+    opacity: 0;
+  }
+  :global(html.js) .wordmark.is-in .wordmark__letter {
+    animation: tune-in var(--dur-5) var(--ease-out) calc(var(--i, 0) * var(--stagger)) backwards;
+  }
+  @keyframes tune-in {
+    from { opacity: 0; filter: blur(0.14em); transform: translateY(0.12em); }
+    to { opacity: 1; filter: blur(0); transform: none; }
+  }
+
+  /* Bar bawah */
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-5) calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--line);
+  }
+  .site-footer__legal {
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+  }
+
+  .to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.5rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--line-strong);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text-soft);
+    transition:
+      color var(--dur-2) var(--ease-out),
+      border-color var(--dur-2) var(--ease-out);
+  }
+  .to-top svg {
+    transition: transform var(--dur-3) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .wordmark__letter:hover {
+      color: var(--accent);
+      transform: translateY(-0.03em);
+    }
+    .to-top:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .to-top:hover svg {
+      transform: translateY(-3px);
+    }
+  }
+
+  @media (min-width: 40em) {
+    .site-footer__nav {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .site-footer__col:last-child {
+      grid-column: auto;
+    }
+  }
+
+  @media (min-width: 64em) {
+    .site-footer__top {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+    }
+    .site-footer__intro {
+      grid-column: 1 / span 5;
+    }
+    .site-footer__nav {
+      grid-column: 7 / span 6;
+    }
+  }
+</style>
+
+<script>
+  const footer = document.querySelector('[data-site-footer]');
+
+  if (footer) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const toTop = footer.querySelector('[data-to-top]');
+    const mark = footer.querySelector('[data-wordmark]');
+
+    if (toTop) {
+      toTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      });
+    }
+
+    if (mark) {
+      const canObserve = 'IntersectionObserver' in window;
+      if (canObserve === false || reduce) {
+        mark.classList.add('is-in');
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+              mark.classList.add('is-in');
+              io.disconnect();
+            }
+          },
+          { threshold: 0.3 }
+        );
+        io.observe(mark);
+      }
+    }
+  }
+</script>

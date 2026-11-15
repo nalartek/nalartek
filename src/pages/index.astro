@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import FeaturedArticle from '../components/FeaturedArticle.astro';
 import {
   getCategoryStats,
   getFeaturedArticles,
@@ -19,185 +18,666 @@ const latest = getLatestArticles(
   featured.map((article) => article.data.slug),
 );
 const categoryStats = getCategoryStats(articles);
+
+const delay = (i: number, step = 90) => `--reveal-delay:${i * step}ms`;
 ---
 
 <BaseLayout
   description="NalarTek adalah media teknologi independen dari Indonesia. Baca panduan dan analisis praktis tentang Android, engineering, Linux, AI, software, dan inovasi."
 >
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">
-          <span class="status-dot" aria-hidden="true"></span>
-          Media teknologi independen
-        </p>
+  <div class="home">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <div class="hero__top">
+          <p class="eyebrow">
+            <span class="eyebrow__dot" aria-hidden="true"></span>
+            Media teknologi independen
+          </p>
+          <p class="hero__tags" aria-hidden="true">
+            Android · Linux · AI · Software
+          </p>
+        </div>
 
-        <h1 id="hero-title">
-          Pahami<br />
-          teknologi.<br />
-          <span>Bangun yang<br />berarti.</span>
+        <h1 id="hero-title" class="hero__title">
+          <span class="hero__line" style="--i:0">Understand</span>
+          <span class="hero__line" style="--i:1">Technology<i>.</i></span>
+          <span class="hero__line hero__line--indent" style="--i:2">Build What</span>
+          <span class="hero__line hero__line--indent hero__line--signal" style="--i:3">Matters.</span>
         </h1>
 
-        <p class="hero-lede">
-          Panduan dan analisis praktis tentang Android, engineering, Linux,
-          AI, software, serta inovasi yang berdampak nyata.
-        </p>
+        <div class="hero__signal" aria-hidden="true"><span></span></div>
 
-        <div class="hero-actions">
-          <a class="button button-primary" href="/articles/">
-            Jelajahi artikel <span aria-hidden="true">↗</span>
-          </a>
-          <a class="button button-secondary" href="/about/">
-            Tentang NalarTek
-          </a>
-        </div>
+        <div class="hero__bottom">
+          <p class="hero__caption" data-reveal>
+            Sinyal di atas kebisingan.
+            <span>01 — 04</span>
+          </p>
 
-        <p class="hero-note">
-          <span aria-hidden="true"></span>
-          Dipahami. Diuji. Didokumentasikan.
-        </p>
-      </div>
-
-      <div class="hero-visual" aria-hidden="true">
-        <div class="visual-grid"></div>
-        <div class="visual-orbit orbit-one"></div>
-        <div class="visual-orbit orbit-two"></div>
-        <div class="hero-logo-frame">
-          <img
-            src="/images/nalartek-logo.png"
-            width="800"
-            height="800"
-            alt=""
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-          />
-        </div>
-        <span class="visual-label label-top">NALARTEK / MARK 001</span>
-        <span class="visual-label label-bottom">
-          ANDROID · LINUX · AI · INNOVATION
-        </span>
-        <span class="visual-cross cross-one">+</span>
-        <span class="visual-cross cross-two">+</span>
-      </div>
-    </div>
-
-    <div class="container hero-footer" aria-hidden="true">
-      <span>01</span>
-      <span class="index-line"></span>
-      <span>04</span>
-    </div>
-  </section>
-
-  {
-    leadArticle && (
-      <section class="section featured-section" aria-labelledby="featured-title">
-        <div class="container">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">01 / Sorotan</p>
-              <h2 class="section-title" id="featured-title">
-                Yang layak dibaca<span>.</span>
-              </h2>
-            </div>
-            <a class="text-link" href="/articles/">
-              Semua artikel <span aria-hidden="true">↗</span>
-            </a>
-          </div>
-
-          <div
-            class:list={[
-              'featured-layout',
-              { 'featured-layout--single': secondaryFeatured.length === 0 },
-            ]}
-          >
-            <FeaturedArticle article={leadArticle} />
-            {secondaryFeatured.length > 0 && (
-              <div class="featured-side">
-                {secondaryFeatured.map((article) => (
-                  <ArticleCard article={article} compact />
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    latest.length > 0 && (
-      <section class="section" aria-labelledby="latest-title">
-        <div class="container">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">02 / Terbaru</p>
-              <h2 class="section-title" id="latest-title">
-                Catatan terbaru<span>.</span>
-              </h2>
-            </div>
-            <p class="section-description">
-              Tulisan baru dari ruang belajar dan eksperimen NalarTek.
+          <div class="hero__copy" data-reveal style="--reveal-delay:120ms">
+            <p class="hero__lede">
+              Panduan dan analisis praktis tentang Android, engineering,
+              Linux, AI, software, serta inovasi yang berdampak nyata.
             </p>
-          </div>
-
-          <div class="article-grid">
-            {latest.map((article) => (
-              <ArticleCard article={article} />
-            ))}
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="/articles/">
+                Jelajahi artikel <span aria-hidden="true">↗</span>
+              </a>
+              <a class="btn btn--ghost" href="/about/">Tentang NalarTek</a>
+            </div>
           </div>
         </div>
-      </section>
-    )
+      </div>
+    </section>
+
+    {
+      leadArticle && (
+        <section class="sec" aria-labelledby="featured-title">
+          <div class="container">
+            <div class="head" data-reveal>
+              <div>
+                <p class="eyebrow">01 / Sorotan</p>
+                <h2 class="head__title" id="featured-title">
+                  Yang layak dibaca<span>.</span>
+                </h2>
+              </div>
+              <a class="link" href="/articles/">
+                Semua artikel <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+
+            <div
+              class:list={[
+                'featured',
+                { 'featured--single': secondaryFeatured.length === 0 },
+              ]}
+            >
+              <div data-reveal>
+                <ArticleCard article={leadArticle} lead eager index={1} />
+              </div>
+              {secondaryFeatured.length > 0 && (
+                <div class="featured__side">
+                  {secondaryFeatured.map((article, i) => (
+                    <div data-reveal style={delay(i + 1, 120)}>
+                      <ArticleCard article={article} compact index={i + 2} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      latest.length > 0 && (
+        <section class="sec" aria-labelledby="latest-title">
+          <div class="container">
+            <div class="head" data-reveal>
+              <div>
+                <p class="eyebrow">02 / Terbaru</p>
+                <h2 class="head__title" id="latest-title">
+                  Catatan terbaru<span>.</span>
+                </h2>
+              </div>
+              <p class="head__note">
+                Tulisan baru dari ruang belajar dan eksperimen NalarTek.
+              </p>
+            </div>
+
+            <div class="latest">
+              {latest.map((article, i) => (
+                <div data-reveal style={delay(i, 110)}>
+                  <ArticleCard article={article} index={i + 1} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="sec" id="topics" aria-labelledby="topics-title">
+      <div class="container">
+        <div class="head" data-reveal>
+          <div>
+            <p class="eyebrow">03 / Kategori</p>
+            <h2 class="head__title" id="topics-title">
+              Area fokus<span>.</span>
+            </h2>
+          </div>
+          <a class="link" href="/categories/">
+            Jelajahi kategori <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <ul class="cats">
+          {categoryStats.map((category, i) => (
+            <li data-reveal style={delay(i, 70)}>
+              <a class="cat" href={`/categories/${category.slug}/`}>
+                <span class="cat__num" aria-hidden="true">{category.number}</span>
+                <h3 class="cat__name">{category.name}</h3>
+                <p class="cat__desc">{category.description}</p>
+                <span class="cat__count">{category.count} artikel</span>
+                <span class="cat__arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="manifesto" aria-labelledby="manifesto-title">
+      <div class="container">
+        <p class="eyebrow" data-reveal>Prinsip NalarTek</p>
+        <h2 id="manifesto-title" class="manifesto__title" data-reveal style="--reveal-delay:100ms">
+          Jangan hanya memakai teknologi.
+          <span>Pahami. Uji. Bangun.</span>
+        </h2>
+        <div class="manifesto__foot" data-reveal style="--reveal-delay:200ms">
+          <p>
+            NalarTek adalah media teknologi independen yang menempatkan
+            pemahaman, verifikasi, dan penggunaan praktis di atas kebisingan.
+          </p>
+          <a class="link" href="/about/">
+            Baca prinsip editorial <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    --signal: #18d6ff;
+    --ink: #f4f6f8;
+    --mute: #8b949e;
+    --soft: #aab2bb;
+    --line: #ffffff24;
+    --char: #0b0d10;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --display: 'Archivo', 'Arial Narrow', Impact, sans-serif;
+    --body: 'Manrope', system-ui, sans-serif;
+    color: var(--ink);
+    font-family: var(--body);
+    overflow-x: clip;
   }
 
-  <section class="section" id="topics" aria-labelledby="topics-title">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">03 / Kategori</p>
-          <h2 class="section-title" id="topics-title">
-            Area fokus<span>.</span>
-          </h2>
-        </div>
-        <a class="text-link" href="/categories/">
-          Jelajahi kategori <span aria-hidden="true">↗</span>
-        </a>
-      </div>
+  /* ---------- shared bits ---------- */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
 
-      <div class="category-grid">
-        {categoryStats.map((category) => (
-          <a class="category-card" href={`/categories/${category.slug}/`}>
-            <div class="category-top">
-              <span>{category.number} / Kategori</span>
-              <span class="category-arrow" aria-hidden="true">↗</span>
-            </div>
-            <h3>{category.name}</h3>
-            <p>{category.description}</p>
-            <div class="category-bottom">
-              <span>{category.count} artikel</span>
-              <span class="bottom-line" aria-hidden="true"></span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
+  .eyebrow__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--signal);
+    animation: blink 2.4s steps(2, jump-none) infinite;
+  }
 
-  <section class="manifesto" aria-labelledby="manifesto-title">
-    <div class="container">
-      <p class="eyebrow">Prinsip NalarTek</p>
-      <h2 id="manifesto-title">
-        Jangan hanya memakai teknologi.<br />
-        <span>Pahami. Uji. Bangun.</span>
-      </h2>
-      <p>
-        NalarTek adalah media teknologi independen yang menempatkan pemahaman,
-        verifikasi, dan penggunaan praktis di atas kebisingan.
-      </p>
-      <a class="text-link manifesto-link" href="/about/">
-        Baca prinsip editorial <span aria-hidden="true">↗</span>
-      </a>
-    </div>
-  </section>
-</BaseLayout>
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  }
+
+  .link span {
+    display: inline-block;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 52px;
+    padding: 0 1.5rem;
+    font-family: var(--body);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--signal);
+    transition:
+      background-color 0.3s var(--ease),
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+  }
+
+  .btn--primary {
+    background: var(--signal);
+    color: #000;
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+
+  .link:focus-visible,
+  .btn:focus-visible,
+  .cat:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 4px;
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: min(100svh, 58rem);
+    display: flex;
+    align-items: flex-end;
+    padding-block: clamp(7rem, 18vh, 11rem) clamp(2.5rem, 6vw, 5rem);
+    background: #000;
+  }
+
+  .hero__inner {
+    width: 100%;
+  }
+
+  .hero__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .hero__tags {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .hero__title {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(2.5rem, 12.5vw, 10rem);
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    color: var(--ink);
+  }
+
+  .hero__line {
+    display: block;
+    animation: rise 1.1s var(--ease) both;
+    animation-delay: calc(var(--i) * 90ms + 120ms);
+  }
+
+  .hero__line i {
+    font-style: normal;
+    color: var(--signal);
+  }
+
+  .hero__line--indent {
+    padding-left: clamp(1rem, 10vw, 9rem);
+  }
+
+  .hero__line--signal {
+    color: var(--signal);
+  }
+
+  .hero__signal {
+    position: relative;
+    height: 1px;
+    margin-block: clamp(2rem, 5vw, 4rem);
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .hero__signal span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 18%;
+    background: var(--signal);
+    animation: scan 5s linear infinite;
+  }
+
+  .hero__bottom {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .hero__caption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 87.5%;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    letter-spacing: -0.01em;
+  }
+
+  .hero__caption span {
+    font-family: var(--body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--mute);
+  }
+
+  .hero__lede {
+    max-width: 38rem;
+    margin: 0 0 1.75rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.65;
+    color: var(--soft);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 52rem) {
+    .hero__bottom {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: end;
+    }
+    .hero__caption {
+      grid-column: 1 / 5;
+    }
+    .hero__copy {
+      grid-column: 7 / 13;
+    }
+  }
+
+  /* ---------- sections ---------- */
+  .sec {
+    padding-block: clamp(4rem, 10vw, 8rem);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+  }
+
+  .head__title {
+    margin: 0.75rem 0 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .head__title span {
+    color: var(--signal);
+  }
+
+  .head__note {
+    max-width: 22rem;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  /* ---------- featured (asymmetric) ---------- */
+  .featured {
+    display: grid;
+    gap: clamp(2.5rem, 4vw, 4rem);
+  }
+
+  .featured__side {
+    display: grid;
+    gap: clamp(2rem, 3vw, 3rem);
+    align-content: start;
+  }
+
+  @media (min-width: 60rem) {
+    .featured {
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+      align-items: start;
+    }
+    .featured--single {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* ---------- latest ---------- */
+  .latest {
+    display: grid;
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  }
+
+  /* ---------- categories ---------- */
+  .cats {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .cats li {
+    border-top: 1px solid var(--line);
+  }
+
+  .cat {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'num name arrow'
+      '. desc desc'
+      '. count count';
+    column-gap: 1.25rem;
+    row-gap: 0.5rem;
+    padding-block: 1.75rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .cat__num {
+    grid-area: num;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--mute);
+  }
+
+  .cat__name {
+    grid-area: name;
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 87.5%;
+    font-size: clamp(1.6rem, 4vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    transition: transform 0.6s var(--ease), color 0.3s var(--ease);
+  }
+
+  .cat__desc {
+    grid-area: desc;
+    margin: 0;
+    max-width: 36rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  .cat__count {
+    grid-area: count;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  .cat__arrow {
+    grid-area: arrow;
+    font-size: 1.5rem;
+    color: var(--mute);
+    transition: transform 0.5s var(--ease), color 0.3s var(--ease);
+  }
+
+  @media (min-width: 52rem) {
+    .cat {
+      grid-template-columns: 5rem minmax(0, 1.1fr) minmax(0, 1.5fr) 7rem 2rem;
+      grid-template-areas: 'num name desc count arrow';
+      align-items: center;
+      padding-block: 2.25rem;
+    }
+    .cat__count {
+      text-align: right;
+    }
+  }
+
+  /* ---------- manifesto ---------- */
+  .manifesto {
+    padding-block: clamp(5rem, 12vw, 10rem);
+    background: var(--char);
+    border-block: 1px solid var(--line);
+  }
+
+  .manifesto__title {
+    margin: 1.25rem 0 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(2.25rem, 7.5vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .manifesto__title span {
+    display: block;
+    color: var(--signal);
+  }
+
+  .manifesto__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-top: clamp(2rem, 5vw, 4rem);
+  }
+
+  .manifesto__foot p {
+    max-width: 34rem;
+    margin: 0;
+    line-height: 1.7;
+    color: var(--soft);
+  }
+
+  /* ---------- hover (only on capable devices) ---------- */
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover {
+      color: var(--signal);
+      border-color: var(--signal);
+    }
+    .link:hover span {
+      transform: translate(0.2rem, -0.2rem);
+    }
+    .btn--primary:hover {
+      background: transparent;
+      color: var(--signal);
+    }
+    .btn--ghost:hover {
+      border-color: var(--signal);
+      color: var(--signal);
+    }
+    .cat:hover .cat__name {
+      transform: translateX(0.6rem);
+      color: var(--signal);
+    }
+    .cat:hover .cat__arrow {
+      transform: translate(0.25rem, -0.25rem);
+      color: var(--signal);
+    }
+    .cat:hover .cat__num {
+      -webkit-text-stroke-color: var(--signal);
+    }
+  }
+
+  @media (hover: none) {
+    .cat:active .cat__name {
+      color: var(--signal);
+    }
+  }
+
+  /* ---------- motion ---------- */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.3em);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes scan {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(560%);
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__line,
+    .hero__signal span,
+    .eyebrow__dot {
+      animation: none;
+    }
+    .link,
+    .link span,
+    .btn,
+    .cat__name,
+    .cat__arrow {
+      transition: none;
+    }
+  }
+</style>

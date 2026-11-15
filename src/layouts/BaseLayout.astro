@@ -39,9 +39,21 @@ const fullTitle = title ? `${title} — NalarTek` : defaultTitle;
 ---
 
 <!doctype html>
-<html lang="id">  
-<head>
-<meta name="google-site-verification" content="1q1yFqMtPr5fdiOsSWnGBWcb-CQ9b0j2P7yoqWAxVCo" />
+<html lang="id">
+  <head>
+    <meta name="google-site-verification" content="1q1yFqMtPr5fdiOsSWnGBWcb-CQ9b0j2P7yoqWAxVCo" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,800..900&family=Manrope:wght@400..800&display=swap"
+    />
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
     <SEO
       title={fullTitle}
       description={description}
@@ -58,11 +70,59 @@ const fullTitle = title ? `${title} — NalarTek` : defaultTitle;
   </head>
 
   <body id="top">
-    <a class="skip-link" href="#main">Lewati ke konten</a>
     <Header />
     <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />
+
+    <script>
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const reduceMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches;
+
+      if (!('IntersectionObserver' in window) || reduceMotion) {
+        items.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+        );
+        items.forEach((el) => observer.observe(el));
+      }
+    </script>
   </body>
 </html>
+
+<style is:global>
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.75rem);
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  html.js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
