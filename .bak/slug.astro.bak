@@ -1,0 +1,937 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCover from '../../components/ArticleCover.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CategoryBadge from '../../components/CategoryBadge.astro';
+import RelatedArticles from '../../components/RelatedArticles.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import {
+  countWords,
+  formatDate,
+  getPublishedArticles,
+  getReadingTime,
+  getRelatedArticles,
+  toIsoDate,
+  type ArticleEntry,
+} from '../../lib/articles';
+import { getCategory } from '../../lib/categories';
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+
+  return articles.map((article) => ({
+    params: { slug: article.data.slug },
+    props: { article, articles },
+  }));
+}
+
+interface Props {
+  article: ArticleEntry;
+  articles: ArticleEntry[];
+}
+
+const { article, articles } = Astro.props;
+const { Content, headings } = await render(article);
+const category = getCategory(article.data.category);
+if (!category) {
+  throw new Error(`Kategori tidak dikenal: ${article.data.category}`);
+}
+
+const readingTime = getReadingTime(article.body ?? '');
+const wordCount = countWords(article.body ?? '');
+const related = getRelatedArticles(article, articles);
+
+const breadcrumbs = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Artikel', href: '/articles/' },
+  { label: category.name, href: `/categories/${category.slug}/` },
+  { label: article.data.title },
+];
+
+const articleMeta = {
+  headline: article.data.title,
+  publishedTime: toIsoDate(article.data.pubDate),
+  modifiedTime: article.data.updatedDate
+    ? toIsoDate(article.data.updatedDate)
+    : undefined,
+  author: article.data.author,
+  section: category.name,
+  tags: article.data.tags,
+  wordCount,
+  readingTimeMinutes: readingTime,
+};
+---
+
+<BaseLayout
+  title={article.data.title}
+  description={article.data.description}
+  image={article.data.coverImage?.src}
+  imageAlt={article.data.coverImage?.alt}
+  imageWidth={article.data.coverImage?.width}
+  imageHeight={article.data.coverImage?.height}
+  type="article"
+  article={articleMeta}
+  breadcrumbs={breadcrumbs}
+>
+  <article class="art">
+    <header class="art-head">
+      <span class="art-head__num" aria-hidden="true">{category.number}</span>
+
+      <div class="container art-head__inner">
+        <div class="art-anim" style="--d:0ms">
+          <Breadcrumbs items={breadcrumbs} />
+        </div>
+
+        <div class="art-meta art-anim" style="--d:60ms">
+          <CategoryBadge category={article.data.category} />
+          {article.data.starter && <span class="art-starter">Starter</span>}
+        </div>
+
+        <h1 class="art-title art-anim" style="--d:120ms">
+          {article.data.title}
+        </h1>
+
+        <p class="art-deck art-anim" style="--d:200ms">
+          {article.data.description}
+        </p>
+
+        <dl class="art-facts" data-reveal style="--reveal-delay:260ms">
+          <div>
+            <dt>Penulis</dt>
+            <dd>{article.data.author}</dd>
+          </div>
+          <div>
+            <dt>Terbit</dt>
+            <dd>
+              <time datetime={toIsoDate(article.data.pubDate)}>
+                {formatDate(article.data.pubDate)}
+              </time>
+            </dd>
+          </div>
+          <div>
+            <dt>Waktu baca</dt>
+            <dd>{readingTime} menit</dd>
+          </div>
+          {article.data.updatedDate && (
+            <div>
+              <dt>Diperbarui</dt>
+              <dd>
+                <time datetime={toIsoDate(article.data.updatedDate)}>
+                  {formatDate(article.data.updatedDate)}
+                </time>
+              </dd>
+            </div>
+          )}
+        </dl>
+      </div>
+    </header>
+
+    <div class="container art-layout">
+      <aside class="art-side" aria-label="Navigasi artikel">
+        {headings.length > 0 && (
+          <div class="art-toc">
+            <TableOfContents headings={headings} />
+          </div>
+        )}
+
+        <div class="art-note" data-reveal>
+          <span class="art-note__label">Kategori</span>
+          <a class="art-note__name" href={`/categories/${category.slug}/`}>
+            {category.name}
+          </a>
+          <p>{category.description}</p>
+        </div>
+
+        <div class="art-note" data-reveal style="--reveal-delay:100ms">
+          <span class="art-note__label">Koreksi</span>
+          <p>
+            Menemukan kesalahan atau informasi yang perlu diperbarui? Sampaikan
+            melalui halaman kontak.
+          </p>
+          <a class="art-link" href="/contact/">
+            Hubungi editorial <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </aside>
+
+      <div class="art-main">
+        <div class="art-cover">
+          <ArticleCover article={article} eager class="article-hero-cover" />
+        </div>
+
+        {article.data.starter && (
+          <aside
+            class="art-disclosure"
+            aria-label="Keterangan artikel starter"
+            data-reveal
+          >
+            <strong>Artikel starter NalarTek.</strong>
+            <span>
+              Tulisan ini adalah contoh awal untuk menguji sistem publikasi,
+              bukan liputan peristiwa terkini. Klaim teknisnya merujuk pada
+              sumber yang tertaut di bagian Sumber.
+            </span>
+          </aside>
+        )}
+
+        <div class="art-prose">
+          <Content />
+        </div>
+
+        <footer class="art-footer" data-reveal>
+          <ul class="art-tags" aria-label="Tag artikel">
+            {article.data.tags.map((tag) => (
+              <li>{tag}</li>
+            ))}
+          </ul>
+
+          <div class="art-footer__links">
+            <a class="art-link" href={`/categories/${category.slug}/`}>
+              Semua {category.name} <span aria-hidden="true">↗</span>
+            </a>
+            <a class="art-link" href="/articles/">
+              Arsip artikel <span aria-hidden="true">↗</span>
+            </a>
+            <a class="art-link" href="/contact/">
+              Laporkan koreksi <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </article>
+
+  <RelatedArticles articles={related} />
+</BaseLayout>
+
+<script>
+  // Tandai item TOC yang sedang dibaca (aria-current)
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.art-toc a[href^="#"]'),
+  );
+
+  if (links.length > 0 && 'IntersectionObserver' in window) {
+    const byId = new Map<string, HTMLAnchorElement>();
+    for (const link of links) {
+      const raw = link.getAttribute('href') ?? '';
+      try {
+        byId.set(decodeURIComponent(raw.slice(1)), link);
+      } catch {
+        byId.set(raw.slice(1), link);
+      }
+    }
+
+    const headingEls = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        '.art-prose h2[id], .art-prose h3[id]',
+      ),
+    ).filter((el) => byId.has(el.id));
+
+    const setActive = (id: string) => {
+      links.forEach((l) => l.removeAttribute('aria-current'));
+      byId.get(id)?.setAttribute('aria-current', 'true');
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive((entry.target as HTMLElement).id);
+          }
+        }
+      },
+      { rootMargin: '-15% 0px -70% 0px' },
+    );
+
+    headingEls.forEach((el) => io.observe(el));
+  }
+</script>
+
+<style>
+  .art {
+    --signal: #18d6ff;
+    --ink: #f4f6f8;
+    --text: #d5dbe1;
+    --soft: #aab2bb;
+    --mute: #8b949e;
+    --line: #ffffff24;
+    --char: #0b0d10;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --display: 'Archivo', 'Arial Narrow', Impact, sans-serif;
+    --body: 'Manrope', system-ui, sans-serif;
+    --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas,
+      'Liberation Mono', monospace;
+    --top: calc(var(--header-h, 5rem) + 1.5rem);
+    color: var(--ink);
+    font-family: var(--body);
+    overflow-x: clip;
+  }
+
+  /* ---------- animasi masuk (CSS murni, aman untuk LCP) ---------- */
+  .art-anim {
+    animation: rise 1s var(--ease) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.9rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---------- header ---------- */
+  .art-head {
+    position: relative;
+    padding-block: clamp(7rem, 15vh, 9.5rem) clamp(2.5rem, 6vw, 4.5rem);
+    background: #000;
+    border-bottom: 1px solid var(--line);
+    overflow: clip;
+  }
+
+  .art-head__num {
+    position: absolute;
+    right: -0.04em;
+    bottom: -0.2em;
+    z-index: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(10rem, 40vw, 30rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px #ffffff1a;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .art-head__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .art-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1rem;
+  }
+
+  .art-starter {
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--signal);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  .art-title {
+    max-width: 18em;
+    margin: 0.5rem 0 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(2.25rem, 7.2vw, 5.75rem);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  .art-deck {
+    max-width: 42rem;
+    margin: 0.5rem 0 0;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--soft);
+  }
+
+  .art-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 1.5rem;
+    margin: 1.5rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .art-facts div {
+    min-width: 0;
+  }
+
+  .art-facts dt {
+    margin: 0 0 0.35rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .art-facts dd {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  @media (min-width: 40rem) {
+    .art-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem 3.5rem;
+    }
+  }
+
+  /* ---------- layout ---------- */
+  .art-layout {
+    display: grid;
+    gap: 2rem;
+    padding-block: clamp(2.5rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
+  }
+
+  .art-main {
+    min-width: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .art-layout {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: start;
+    }
+  }
+
+  /* ---------- sidebar ---------- */
+  .art-side {
+    min-width: 0;
+  }
+
+  .art-toc {
+    padding-left: 1.1rem;
+    border-left: 1px solid var(--line);
+    max-height: 16rem;
+    overflow-y: auto;
+  }
+
+  .art-toc :global(h2),
+  .art-toc :global(h3),
+  .art-toc :global(summary) {
+    margin: 0 0 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .art-toc :global(ol),
+  .art-toc :global(ul) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .art-toc :global(li) {
+    margin: 0;
+    padding: 0;
+  }
+
+  .art-toc :global(ol ol),
+  .art-toc :global(ul ul),
+  .art-toc :global(ol ul),
+  .art-toc :global(ul ol) {
+    padding-left: 0.9rem;
+  }
+
+  .art-toc :global(a) {
+    display: block;
+    padding-block: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--mute);
+    text-decoration: none;
+    transition: color 0.3s var(--ease);
+  }
+
+  .art-toc :global(a[aria-current='true']) {
+    color: var(--signal);
+  }
+
+  .art-toc :global(a:focus-visible) {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  .art-note {
+    display: none;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .art-note__label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .art-note__name {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 87.5%;
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.3s var(--ease);
+  }
+
+  .art-note p {
+    margin: 0 0 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--mute);
+  }
+
+  @media (min-width: 64rem) {
+    .art-side {
+      position: sticky;
+      top: var(--top);
+      max-height: calc(100svh - var(--top) - 1.5rem);
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line) transparent;
+    }
+    .art-toc {
+      max-height: none;
+      overflow: visible;
+    }
+    .art-note {
+      display: block;
+    }
+  }
+
+  /* ---------- link kecil ---------- */
+  .art-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  }
+
+  .art-link span {
+    display: inline-block;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .art-link:focus-visible,
+  .art-note__name:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 4px;
+  }
+
+  /* ---------- cover + disclosure ---------- */
+  .art-cover {
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .art-cover :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .art-disclosure {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--char);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--signal);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+
+  .art-disclosure strong {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  /* ---------- prose ---------- */
+  .art-prose {
+    max-width: 44rem;
+    font-size: clamp(1.0625rem, 0.4vw + 1rem, 1.1875rem);
+    line-height: 1.7;
+    color: var(--text);
+    overflow-wrap: break-word;
+  }
+
+  .art-prose > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .art-prose :global(::selection) {
+    background: var(--signal);
+    color: #000;
+  }
+
+  .art-prose :global(p) {
+    margin: 0 0 1.35em;
+  }
+
+  .art-prose :global(h2),
+  .art-prose :global(h3),
+  .art-prose :global(h4) {
+    scroll-margin-top: var(--top);
+    color: var(--ink);
+  }
+
+  .art-prose :global(h2) {
+    margin: 2.75em 0 0.9em;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(1.65rem, 3.6vw, 2.35rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .art-prose :global(h3) {
+    margin: 2.2em 0 0.7em;
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 87.5%;
+    font-size: clamp(1.3rem, 2.6vw, 1.65rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .art-prose :global(h4) {
+    margin: 2em 0 0.6em;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  .art-prose :global(strong),
+  .art-prose :global(b) {
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .art-prose :global(em) {
+    font-style: italic;
+  }
+
+  .art-prose :global(ul),
+  .art-prose :global(ol) {
+    margin: 0 0 1.5em;
+    padding-left: 1.4em;
+  }
+
+  .art-prose :global(ul) {
+    list-style: square;
+  }
+
+  .art-prose :global(li) {
+    margin: 0.45em 0;
+    padding-left: 0.2em;
+  }
+
+  .art-prose :global(li::marker) {
+    color: var(--signal);
+  }
+
+  .art-prose :global(ol > li::marker) {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .art-prose :global(li > p) {
+    margin-bottom: 0.6em;
+  }
+
+  .art-prose :global(li > ul),
+  .art-prose :global(li > ol) {
+    margin: 0.45em 0 0;
+  }
+
+  .art-prose :global(a) {
+    color: var(--signal);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+
+  .art-prose :global(a:focus-visible) {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  .art-prose :global(blockquote) {
+    margin: 2em 0;
+    padding: 0.25rem 0 0.25rem 1.4rem;
+    border-left: 2px solid var(--signal);
+    font-size: 1.12em;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  .art-prose :global(blockquote > :last-child) {
+    margin-bottom: 0;
+  }
+
+  .art-prose :global(hr) {
+    margin: 3em 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .art-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+  }
+
+  .art-prose :global(figure) {
+    margin: 2em 0;
+  }
+
+  .art-prose :global(figcaption) {
+    margin-top: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--mute);
+  }
+
+  .art-prose :global(table) {
+    display: block;
+    width: 100%;
+    margin: 2em 0;
+    overflow-x: auto;
+    border-collapse: collapse;
+    border-top: 1px solid var(--line);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .art-prose :global(th) {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #ffffff40;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--mute);
+  }
+
+  .art-prose :global(td) {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  .art-prose :global(kbd) {
+    padding: 0.1em 0.45em;
+    border: 1px solid #ffffff40;
+    border-bottom-width: 2px;
+    font-family: var(--mono);
+    font-size: 0.85em;
+    color: var(--ink);
+  }
+
+  .art-prose :global(section[data-footnotes]) {
+    margin-top: 3em;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+    color: var(--soft);
+  }
+
+  /* ---------- kode ---------- */
+  .art-prose :global(:not(pre) > code) {
+    padding: 0.12em 0.4em;
+    background: var(--char);
+    border: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 0.88em;
+    color: var(--signal);
+    word-break: break-word;
+  }
+
+  .art-prose :global(pre) {
+    margin: 1.9em 0;
+    padding: 1.15rem 1.25rem;
+    background: var(--char) !important;
+    color: #e8f6fb !important;
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--signal);
+    border-radius: 0;
+    box-shadow: none;
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    letter-spacing: 0;
+    tab-size: 2;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #ffffff40 transparent;
+  }
+
+  .art-prose :global(pre:focus-visible) {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  .art-prose :global(pre code) {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    padding: 0;
+    background: none !important;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    white-space: pre;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  /* Teks kode monokrom putih. Hapus blok di bawah ini kalau ingin
+     syntax highlighting berwarna-warni bawaan Shiki. */
+  .art-prose :global(pre span) {
+    color: #e8f6fb !important;
+  }
+
+  /* ---------- footer artikel ---------- */
+  .art-footer {
+    max-width: 44rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .art-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .art-tags li {
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+
+  .art-tags li::before {
+    content: '#';
+    margin-right: 0.15em;
+    color: var(--signal);
+  }
+
+  .art-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 2rem;
+    margin-top: 1.5rem;
+  }
+
+  /* ---------- hover hanya di perangkat yang mendukung ---------- */
+  @media (hover: hover) and (pointer: fine) {
+    .art-link:hover {
+      color: var(--signal);
+      border-color: var(--signal);
+    }
+    .art-link:hover span {
+      transform: translate(0.2rem, -0.2rem);
+    }
+    .art-note__name:hover {
+      color: var(--signal);
+    }
+    .art-toc :global(a:hover) {
+      color: var(--signal);
+    }
+    .art-prose :global(a:hover) {
+      background: var(--signal);
+      color: #000;
+      text-decoration-color: transparent;
+    }
+    .art-tags li:hover {
+      border-color: var(--signal);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art-anim {
+      animation: none;
+    }
+    .art-link,
+    .art-link span,
+    .art-note__name,
+    .art-toc :global(a),
+    .art-prose :global(a) {
+      transition: none;
+    }
+  }
+</style>

@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import EmptyState from '../../components/EmptyState.astro';
-import PageHero from '../../components/PageHero.astro';
 import {
   getCategoryArticles,
   getPublishedArticles,
@@ -41,61 +41,428 @@ const breadcrumbs = [
   description={`${category.description} Baca ${articles.length} artikel NalarTek dalam kategori ${category.name}.`}
   breadcrumbs={breadcrumbs}
 >
-  <PageHero
-    eyebrow={`Kategori ${category.number}`}
-    title={category.name}
-    description={category.description}
-    breadcrumbs={breadcrumbs}
-  >
-    <div class="page-hero__meta">
-      <span>{articles.length} artikel</span>
-      <span aria-hidden="true">·</span>
-      <a href="/articles/">Lihat seluruh arsip</a>
-    </div>
-  </PageHero>
+  <div class="cat-page">
+    <section class="cat-hero" aria-labelledby="category-title">
+      <span class="cat-hero__num" aria-hidden="true">{category.number}</span>
 
-  <section class="section category-archive" aria-labelledby="category-articles">
-    <div class="container">
-      
-      <!-- Teks Pengantar SEO -->
-      <div class="about-copy" style="margin-bottom: 4rem; max-width: 800px;">
-        {category.longDescription.map((paragraph) => (
-          <p>{paragraph}</p>
-        ))}
-      </div>
-
-      <div class="archive-toolbar">
-        <h2 class="archive-count" id="category-articles">
-          Artikel {category.name}
-        </h2>
-        <nav class="archive-filters" aria-label="Pindah kategori">
-          <a class="filter-chip" href="/articles/">Semua</a>
-          {categories.map((item) => (
-            <a
-              class="filter-chip"
-              href={`/categories/${item.slug}/`}
-              aria-current={item.slug === category.slug ? 'page' : undefined}
-            >
-              {item.name}
-            </a>
-          ))}
-        </nav>
-      </div>
-
-      {articles.length > 0 ? (
-        <div class="article-grid">
-          {articles.map((article) => (
-            <ArticleCard article={article} />
-          ))}
+      <div class="container cat-hero__inner">
+        <div class="cat-anim" style="--d:0ms">
+          <Breadcrumbs items={breadcrumbs} />
         </div>
-      ) : (
-        <EmptyState
-          title={`Belum ada artikel ${category.name}.`}
-          description="Kategori ini sudah tersedia, tetapi artikelnya belum terbit. Kembali ke arsip untuk membaca topik lain."
-          href="/articles/"
-          label="Buka semua artikel"
-        />
-      )}
-    </div>
-  </section>
+
+        <p class="cat-eyebrow cat-anim" style="--d:60ms">
+          <span aria-hidden="true"></span>
+          Kategori {category.number}
+        </p>
+
+        <h1 class="cat-hero__title cat-anim" id="category-title" style="--d:120ms">
+          {category.name}
+        </h1>
+
+        <p class="cat-hero__lede cat-anim" style="--d:200ms">
+          {category.description}
+        </p>
+
+        <div class="cat-hero__meta" data-reveal style="--reveal-delay:260ms">
+          <span class="cat-hero__count">{articles.length} artikel</span>
+          <a class="cat-link" href="/articles/">
+            Lihat seluruh arsip <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {
+      category.longDescription.length > 0 && (
+        <section class="cat-manifesto" aria-label={`Tentang kategori ${category.name}`}>
+          <div class="container cat-manifesto__grid">
+            <p class="cat-manifesto__label" data-reveal>
+              Tentang kategori
+              <strong>{category.name}</strong>
+            </p>
+            <div
+              class="cat-manifesto__body"
+              data-reveal
+              style="--reveal-delay:100ms"
+            >
+              {category.longDescription.map((paragraph) => (
+                <p>{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <section class="cat-archive" aria-labelledby="category-articles">
+      <div class="container">
+        <div class="cat-toolbar" data-reveal>
+          <h2 class="cat-toolbar__title" id="category-articles">
+            Artikel {category.name}<span aria-hidden="true">.</span>
+          </h2>
+          <nav class="cat-chips" aria-label="Pindah kategori">
+            <a class="chip" href="/articles/">Semua</a>
+            {categories.map((item) => (
+              <a
+                class="chip"
+                href={`/categories/${item.slug}/`}
+                aria-current={item.slug === category.slug ? 'page' : undefined}
+              >
+                {item.name}
+              </a>
+            ))}
+          </nav>
+        </div>
+
+        {
+          articles.length > 0 ? (
+            <div class="cat-list">
+              {articles.map((article, i) => (
+                <div data-reveal style={`--reveal-delay:${(i % 3) * 100}ms`}>
+                  <ArticleCard article={article} index={i + 1} eager={i === 0} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title={`Belum ada artikel ${category.name}.`}
+              description="Kategori ini sudah tersedia, tetapi artikelnya belum terbit. Kembali ke arsip untuk membaca topik lain."
+              href="/articles/"
+              label="Buka semua artikel"
+            />
+          )
+        }
+      </div>
+    </section>
+  </div>
 </BaseLayout>
+
+<style>
+  .cat-page {
+    --signal: #18d6ff;
+    --ink: #f4f6f8;
+    --soft: #aab2bb;
+    --mute: #8b949e;
+    --line: #ffffff24;
+    --char: #0b0d10;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --display: 'Archivo', 'Arial Narrow', Impact, sans-serif;
+    --body: 'Manrope', system-ui, sans-serif;
+    --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas,
+      'Liberation Mono', monospace;
+    color: var(--ink);
+    font-family: var(--body);
+    overflow-x: clip;
+  }
+
+  /* ---------- animasi masuk (CSS murni) ---------- */
+  .cat-anim {
+    animation: rise 1s var(--ease) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.9rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---------- hero ---------- */
+  .cat-hero {
+    position: relative;
+    padding-block: clamp(7rem, 16vh, 10rem) clamp(3rem, 7vw, 6rem);
+    background: #000;
+    border-bottom: 1px solid var(--line);
+    overflow: clip;
+  }
+
+  .cat-hero__num {
+    position: absolute;
+    right: -0.04em;
+    top: 50%;
+    z-index: 0;
+    transform: translateY(-46%);
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(13rem, 52vw, 38rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px #ffffff1a;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .cat-hero__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .cat-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0.75rem 0 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  .cat-eyebrow span {
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--signal);
+  }
+
+  .cat-hero__title {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(2.75rem, 13.5vw, 10.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  .cat-hero__title::after {
+    content: '.';
+    color: var(--signal);
+  }
+
+  .cat-hero__lede {
+    max-width: 36rem;
+    margin: 0.75rem 0 0;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--soft);
+  }
+
+  .cat-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 2rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .cat-hero__count {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  .cat-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  }
+
+  .cat-link span {
+    display: inline-block;
+    transition: transform 0.4s var(--ease);
+  }
+
+  .cat-link:focus-visible,
+  .chip:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 4px;
+  }
+
+  /* ---------- manifesto editorial ---------- */
+  .cat-manifesto {
+    padding-block: clamp(3.5rem, 8vw, 6.5rem);
+    background: var(--char);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .cat-manifesto__grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .cat-manifesto__label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .cat-manifesto__label::before {
+    content: '';
+    width: 3rem;
+    height: 2px;
+    margin-bottom: 0.5rem;
+    background: var(--signal);
+  }
+
+  .cat-manifesto__label strong {
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: var(--ink);
+  }
+
+  .cat-manifesto__body {
+    max-width: 42rem;
+  }
+
+  .cat-manifesto__body p {
+    margin: 0 0 1.4em;
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--soft);
+  }
+
+  .cat-manifesto__body p:first-child {
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .cat-manifesto__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (min-width: 52rem) {
+    .cat-manifesto__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 2rem;
+    }
+    .cat-manifesto__label {
+      grid-column: 1 / 5;
+    }
+    .cat-manifesto__body {
+      grid-column: 5 / 13;
+    }
+  }
+
+  /* ---------- arsip ---------- */
+  .cat-archive {
+    padding-block: clamp(3.5rem, 8vw, 6rem) clamp(4rem, 9vw, 8rem);
+  }
+
+  .cat-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .cat-toolbar__title {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 900;
+    font-stretch: 87.5%;
+    font-size: clamp(1.75rem, 4.5vw, 3.25rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .cat-toolbar__title span {
+    color: var(--signal);
+  }
+
+  .cat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 1rem;
+    border: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--soft);
+    text-decoration: none;
+    transition:
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease),
+      background-color 0.3s var(--ease);
+  }
+
+  .chip[aria-current='page'] {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #000;
+  }
+
+  .cat-list {
+    display: grid;
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));
+  }
+
+  /* ---------- hover hanya di perangkat yang mendukung ---------- */
+  @media (hover: hover) and (pointer: fine) {
+    .cat-link:hover {
+      color: var(--signal);
+      border-color: var(--signal);
+    }
+    .cat-link:hover span {
+      transform: translate(0.2rem, -0.2rem);
+    }
+    .chip:not([aria-current='page']):hover {
+      border-color: var(--signal);
+      color: var(--signal);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cat-anim {
+      animation: none;
+    }
+    .cat-link,
+    .cat-link span,
+    .chip {
+      transition: none;
+    }
+  }
+</style>
